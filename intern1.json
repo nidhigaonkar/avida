@@ -1,0 +1,13 @@
+{
+    "name": "Anna",
+    "age": 21,
+    "location": "San Francisco, CA",
+    "company": "Tech Corp",
+    "interests": [
+        "technology",
+        "startup networking",
+        "artificial intelligence",
+        "hiking",
+        "photography"
+    ]
+} 
