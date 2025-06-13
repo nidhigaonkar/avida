@@ -1,11 +1,10 @@
 {
     "name": "Jordan",
     "age": 20,
-    "location": "San Francisco, CA",
+    "location": "New York, NY",
     "company": "StartupCo",
     "interests": [
         "entrepreneurship",
-        
         "music",
         "coffee",
         "food",
@@ -14,13 +13,10 @@
         "startups",
         "ultimate frisbee",
         "coffee shops",
-        "axe throwing",
-        "open mic nights",
-        "harbor cruises",
+           "open mic nights",
         "pop-up markets",
         "bowling",
         "cultural festivals",
-        "pub quizzes",
         "nature walks"
     ]
 } 

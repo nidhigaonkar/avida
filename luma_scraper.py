@@ -66,29 +66,6 @@ class LumaEventScraper:
         if hasattr(self, 'driver'):
             self.driver.quit()
     
-    def load_people_profiles(self, person1_data: Dict, person2_data: Dict) -> tuple[Person, Person]:
-        """Load two people's profiles from JSON data"""
-        try:
-            with open('intern1.json', 'r') as f1, open('intern2.json', 'r') as f2:
-                person1 = Person.from_json(json.load(f1))
-                person2 = Person.from_json(json.load(f2))
-            return person1, person2
-        except Exception as e:
-            print(f"Error loading intern profiles: {str(e)}")
-            return Person.from_json(person1_data), Person.from_json(person2_data)
-    
-    def get_common_interests(self, person1: Person, person2: Person) -> List[str]:
-        """Find common interests between two people"""
-        interests1 = set(i.lower() for i in person1.interests)
-        interests2 = set(i.lower() for i in person2.interests)
-        return list(interests1.intersection(interests2))
-    
-    def get_all_interests(self, person1: Person, person2: Person) -> List[str]:
-        """Get all unique interests from both people"""
-        interests1 = set(i.lower() for i in person1.interests)
-        interests2 = set(i.lower() for i in person2.interests)
-        return list(interests1.union(interests2))
-    
     def get_city_from_location(self, location: str) -> str:
         """Extract city from location string"""
         location = location.lower().strip()
@@ -130,7 +107,6 @@ class LumaEventScraper:
             'gta': 'Toronto',  # Greater Toronto Area
             'north york': 'Toronto',
             'scarborough': 'Toronto',
-        
             'downtown toronto': 'Toronto',
             'york': 'Toronto',
             'east york': 'Toronto'
@@ -264,7 +240,7 @@ class LumaEventScraper:
                     event = {
                         'title': title,
                         'date': time_text,
-                        'location': location_text or "San Francisco",
+                        'location': location_text or city,
                         'organizers': organizers,
                         'status': status,
                         'attendees': attendee_count,
@@ -300,16 +276,16 @@ class LumaEventScraper:
                 if first_event:
                     print("\nFirst event-like structure found:")
                     print(first_event.prettify()[:500])
-            else:
-                print(f"\nSuccessfully processed {len(events)} events from {city}")
-                
-                # Save events to JSON file
-                try:
-                    with open('all_luma_events.json', 'w', encoding='utf-8') as f:
-                        json.dump(events, f, indent=4, ensure_ascii=False)
-                    print(f"\nSaved {len(events)} events to all_luma_events.json")
-                except Exception as e:
-                    print(f"Error saving events to JSON file: {str(e)}")
+            
+            print(f"\nSuccessfully processed {len(events)} events from {city}")
+            
+            # Save events to JSON file
+            try:
+                with open(f'luma_events_{city.lower().replace(" ", "_")}.json', 'w', encoding='utf-8') as f:
+                    json.dump(events, f, indent=4, ensure_ascii=False)
+                print(f"\nSaved {len(events)} events to luma_events_{city.lower().replace(' ', '_')}.json")
+            except Exception as e:
+                print(f"Error saving events to JSON file: {str(e)}")
             
             return events
             
@@ -323,101 +299,12 @@ class LumaEventScraper:
         """Main function to scrape events based on location"""
         return self.scrape_events_for_location(location)
 
-    def find_matching_events(self, events: List[Dict], person1: Person, person2: Person) -> List[Dict]:
-        """Find events that match both people's interests and return top 3"""
-        if not events:
-            print("No events to process.")
-            return []
-            
-        matching_events = []
-        person1_interests = set(interest.lower() for interest in person1.interests)
-        person2_interests = set(interest.lower() for interest in person2.interests)
-        
-        # Get common interests between both people
-        common_interests = person1_interests.intersection(person2_interests)
-        print(f"\nCommon interests between {person1.name} and {person2.name}:")
-        print(", ".join(common_interests))
-        
-        for event in events:
-            # Combine all relevant text fields for matching
-            event_text = f"{event['title']} {event['description']} {event.get('organizers', '')}".lower()
-            
-            # Find matching interests for each person
-            person1_matches = [interest for interest in person1_interests if interest in event_text]
-            person2_matches = [interest for interest in person2_interests if interest in event_text]
-            common_matches = [interest for interest in common_interests if interest in event_text]
-            
-            # Enhanced match score calculation:
-            # - Common interests are worth 3 points
-            # - Individual interests are worth 1 point
-            # - Bonus point if event matches interests from both people
-            match_score = (len(common_matches) * 3) + len(set(person1_matches + person2_matches))
-            if person1_matches and person2_matches:
-                match_score += 1  # Bonus for matching both people's interests
-            
-            # Consider an event relevant if:
-            # 1. It matches at least one common interest, OR
-            # 2. It matches at least one interest from each person
-            if common_matches or (person1_matches and person2_matches):
-                event_copy = event.copy()
-                event_copy.update({
-                    'match_score': match_score,
-                    'common_matches': common_matches,
-                    'person1_matches': person1_matches,
-                    'person2_matches': person2_matches,
-                    'person1_name': person1.name,
-                    'person2_name': person2.name
-                })
-                matching_events.append(event_copy)
-        
-        if not matching_events:
-            print("\nNo matching events found.")
-            print(f"Searched through {len(events)} events across all cities.")
-            print(f"{person1.name}'s interests: {', '.join(person1_interests)}")
-            print(f"{person2.name}'s interests: {', '.join(person2_interests)}")
-            return []
-        
-        # Sort by match score (highest first) and take top 3
-        matching_events.sort(key=lambda x: x['match_score'], reverse=True)
-        top_3_events = matching_events[:3]
-        
-        print(f"\nTop 3 event suggestions for {person1.name} and {person2.name}:")
-        
-        # Save top 3 matching events to a separate JSON file
-        try:
-            with open('top_matching_events.json', 'w', encoding='utf-8') as f:
-                json.dump(top_3_events, f, indent=4, ensure_ascii=False)
-            print("Top matching events saved to top_matching_events.json")
-        except Exception as e:
-            print(f"Error saving matching events: {str(e)}")
-        
-        return top_3_events
-
-    def display_matching_events(self, events: List[Dict]) -> None:
-        """Display matching events with detailed interest information"""
-        if not events:
-            return
-            
-        for i, event in enumerate(events, 1):
-            print(f"\nSuggestion {i} (Match Score: {event['match_score']}):")
-            print(f"Title: {event['title']}")
-            print(f"City: {event['city']}")
-            print(f"Time: {event['date']}")
-            print(f"Location: {event['location']}")
-            print(f"Link: {event['link']}")
-            
-            # Display matching interests
-            if event['common_matches']:
-                print(f"Common Interests: {', '.join(event['common_matches'])}")
-            if event['person1_matches']:
-                print(f"{event['person1_name']}'s Matching Interests: {', '.join(event['person1_matches'])}")
-            if event['person2_matches']:
-                print(f"{event['person2_name']}'s Matching Interests: {', '.join(event['person2_matches'])}")
-            print("-" * 80)
-
 def main():
     """Main function to run the scraper"""
     try:
+        # Load environment variables
+        load_dotenv()
+        
         # Load intern profiles from JSON files
         try:
             with open('intern1.json', 'r') as f1, open('intern2.json', 'r') as f2:
@@ -431,20 +318,21 @@ def main():
             return
 
         scraper = LumaEventScraper()
-        person1, person2 = scraper.load_people_profiles(person1_data, person2_data)
         
         # Get events from both locations
         events = []
-        for person in [person1, person2]:
-            location_events = scraper.scrape_events(person.location)
+        for person_data in [person1_data, person2_data]:
+            location_events = scraper.scrape_events(person_data['location'])
             events.extend(location_events)
         
-        # Find matching events across all locations
-        matching_events = scraper.find_matching_events(events, person1, person2)
-        
-        if matching_events:
-            scraper.display_matching_events(matching_events)
-            
+        # Save all events to a combined JSON file
+        try:
+            with open('all_luma_events.json', 'w', encoding='utf-8') as f:
+                json.dump(events, f, indent=4, ensure_ascii=False)
+            print(f"\nSaved {len(events)} total events to all_luma_events.json")
+        except Exception as e:
+            print(f"Error saving combined events to JSON file: {str(e)}")
+    
     except Exception as e:
         print(f"Error in main: {str(e)}")
     finally:
