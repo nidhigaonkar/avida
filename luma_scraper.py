@@ -37,24 +37,25 @@ class Person:
 
 class LumaEventScraper:
     def __init__(self):
-        # Set up Chrome options
-        chrome_options = Options()
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--disable-dev-shm-usage')
-        
-        # Check if running on Mac ARM64
-        is_mac_arm = platform.system() == 'Darwin' and platform.machine() == 'arm64'
-        chrome_version = "137.0.7151.104"  # Update this if your Chrome version changes
+        """Initialize the scraper with Chrome driver"""
         try:
-            if is_mac_arm:
-                # For Mac ARM64, use the specific ChromeDriver and version
-                service = Service(ChromeDriverManager(driver_version=chrome_version, chrome_type=ChromeType.CHROMIUM).install())
-            else:
-                # For other platforms, use the default ChromeDriver and version
-                service = Service(ChromeDriverManager(driver_version=chrome_version).install())
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument('--headless')  # Run in headless mode
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            
+            # Get Chrome version
+            chrome_version = "137.0.7151.104"  # Using a known working version
+            
+            # Initialize the Chrome driver
+            service = Service(ChromeDriverManager(driver_version=chrome_version).install())
             self.driver = webdriver.Chrome(service=service, options=chrome_options)
-            self.base_url = "https://lu.ma/sf"
+            self.city_urls = {
+                'San Francisco': 'https://lu.ma/sf',
+                'Los Angeles': 'https://lu.ma/la',
+                'New York': 'https://lu.ma/nyc',
+                'Toronto': 'https://lu.ma/toronto'
+            }
             print("Chrome driver initialized successfully")
         except Exception as e:
             print(f"Error initializing Chrome driver: {str(e)}")
@@ -88,16 +89,98 @@ class LumaEventScraper:
         interests2 = set(i.lower() for i in person2.interests)
         return list(interests1.union(interests2))
     
-    def scrape_events(self, location: str) -> List[Dict]:
-        """Scrape events from Luma using Selenium and BeautifulSoup"""
-        try:
-            print(f"\nScraping Luma events from {self.base_url}")
-            self.driver.get(self.base_url)
+    def get_city_from_location(self, location: str) -> str:
+        """Extract city from location string"""
+        location = location.lower().strip()
+        
+        # Comprehensive mapping of location variations
+        city_mapping = {
+            # San Francisco variations
+            'san francisco': 'San Francisco',
+            'sf': 'San Francisco',
+            'san fran': 'San Francisco',
+            'bay area': 'San Francisco',
+            'silicon valley': 'San Francisco',
+            'south san francisco': 'San Francisco',
             
-            # Wait for initial page load
+            # Los Angeles variations
+            'los angeles': 'Los Angeles',
+            'la': 'Los Angeles',
+            'l.a.': 'Los Angeles',
+            'la county': 'Los Angeles',
+            'los angeles county': 'Los Angeles',
+            'hollywood': 'Los Angeles',
+            'santa monica': 'Los Angeles',
+            'venice': 'Los Angeles',
+            'culver city': 'Los Angeles',
+            
+            # New York variations
+            'new york': 'New York',
+            'new york city': 'New York',
+            'nyc': 'New York',
+            'ny': 'New York',
+            'manhattan': 'New York',
+            'brooklyn': 'New York',
+            'queens': 'New York',
+            'bronx': 'New York',
+            'staten island': 'New York',
+            
+            # Toronto variations
+            'toronto': 'Toronto',
+            'gta': 'Toronto',  # Greater Toronto Area
+            'north york': 'Toronto',
+            'scarborough': 'Toronto',
+        
+            'downtown toronto': 'Toronto',
+            'york': 'Toronto',
+            'east york': 'Toronto'
+        }
+        
+        # First try exact match
+        if location in city_mapping:
+            return city_mapping[location]
+        
+        # Then try partial match
+        for key, value in city_mapping.items():
+            if key in location:
+                return value
+            
+        # Try matching state/province abbreviations
+        state_city_mapping = {
+            'ca': ['San Francisco', 'Los Angeles'],  # Default to SF for CA
+            'ny': 'New York',
+            'on': 'Toronto',
+            'ontario': 'Toronto'
+        }
+        
+        # Extract potential state/province code
+        parts = location.replace(',', ' ').split()
+        for part in parts:
+            part = part.lower().strip('.')
+            if part in state_city_mapping:
+                if isinstance(state_city_mapping[part], list):
+                    # For CA, check if LA is mentioned, otherwise default to SF
+                    return 'Los Angeles' if any(la_term in location for la_term in ['la', 'los']) else 'San Francisco'
+                return state_city_mapping[part]
+        
+        print(f"Warning: Could not definitively map location '{location}' to a city, defaulting to San Francisco")
+        return 'San Francisco'  # Default to SF if no match found
+
+    def scrape_events_for_location(self, location: str) -> List[Dict]:
+        """Scrape events for a specific location"""
+        city = self.get_city_from_location(location)
+        if city not in self.city_urls:
+            print(f"Warning: No direct URL for {city}, defaulting to San Francisco")
+            city = 'San Francisco'
+        
+        base_url = self.city_urls[city]
+        print(f"\nScraping Luma events from {base_url} for {city}")
+        
+        try:
+            self.driver.get(base_url)
             time.sleep(5)
             
-            # Find and click the "View All" button 
+            # Find and click the "View All" button
             try:
                 view_all = WebDriverWait(self.driver, 10).until(
                     EC.presence_of_element_located((By.XPATH, "//a[contains(text(), 'View All')]"))
@@ -124,7 +207,7 @@ class LumaEventScraper:
             
             # Find all event content divs with the new class structure
             event_divs = soup.find_all('div', class_=lambda x: x and 'event-content' in str(x))
-            print(f"\nFound {len(event_divs)} event divs")
+            print(f"\nFound {len(event_divs)} event divs in {city}")
             
             for div in event_divs:
                 try:
@@ -186,7 +269,8 @@ class LumaEventScraper:
                         'status': status,
                         'attendees': attendee_count,
                         'link': event_link,
-                        'description': f"Organized by {organizers}. {status} {attendee_count} attendees."
+                        'description': f"Organized by {organizers}. {status} {attendee_count} attendees.",
+                        'city': city
                     }
                     
                     events.append(event)
@@ -194,6 +278,7 @@ class LumaEventScraper:
                     print(f"  Time: {time_text}")
                     print(f"  Location: {location_text}")
                     print(f"  Link: {event_link}")
+                    print(f"  City: {city}")
                     print(f"  Organizers: {organizers}")
                     print(f"  Status: {status}")
                     print(f"  Attendees: {attendee_count}")
@@ -203,7 +288,7 @@ class LumaEventScraper:
                     continue
             
             if not events:
-                print("\nNo events found. Debug information:")
+                print(f"\nNo events found in {city}. Debug information:")
                 # Try to find any elements with 'event' in their class name
                 event_related = soup.find_all(class_=lambda x: x and 'event' in str(x).lower())
                 print(f"Found {len(event_related)} elements with 'event' in class name")
@@ -216,87 +301,155 @@ class LumaEventScraper:
                     print("\nFirst event-like structure found:")
                     print(first_event.prettify()[:500])
             else:
-                print(f"\nSuccessfully processed {len(events)} events")
+                print(f"\nSuccessfully processed {len(events)} events from {city}")
                 
                 # Save events to JSON file
                 try:
-                    with open('luma_events.json', 'w', encoding='utf-8') as f:
+                    with open('all_luma_events.json', 'w', encoding='utf-8') as f:
                         json.dump(events, f, indent=4, ensure_ascii=False)
-                    print(f"\nSaved {len(events)} events to luma_events.json")
+                    print(f"\nSaved {len(events)} events to all_luma_events.json")
                 except Exception as e:
                     print(f"Error saving events to JSON file: {str(e)}")
             
             return events
             
         except Exception as e:
-            print(f"Error scraping events: {str(e)}")
+            print(f"Error scraping events for {city}: {str(e)}")
             if hasattr(e, 'msg'):
                 print(f"Selenium error message: {e.msg}")
             return []
-    
+
+    def scrape_events(self, location: str) -> List[Dict]:
+        """Main function to scrape events based on location"""
+        return self.scrape_events_for_location(location)
+
     def find_matching_events(self, events: List[Dict], person1: Person, person2: Person) -> List[Dict]:
-        """Find events that match both people's interests"""
+        """Find events that match both people's interests and return top 3"""
         if not events:
             print("No events to process.")
             return []
             
         matching_events = []
-        combined_interests = set(person1.interests + person2.interests)
+        person1_interests = set(interest.lower() for interest in person1.interests)
+        person2_interests = set(interest.lower() for interest in person2.interests)
+        
+        # Get common interests between both people
+        common_interests = person1_interests.intersection(person2_interests)
+        print(f"\nCommon interests between {person1.name} and {person2.name}:")
+        print(", ".join(common_interests))
         
         for event in events:
-            event_text = f"{event['title']} {event['description']}".lower()
-            matching_interests = [interest for interest in combined_interests if interest.lower() in event_text]
+            # Combine all relevant text fields for matching
+            event_text = f"{event['title']} {event['description']} {event.get('organizers', '')}".lower()
             
-            if matching_interests:
-                event['matching_interests'] = matching_interests
-                matching_events.append(event)
+            # Find matching interests for each person
+            person1_matches = [interest for interest in person1_interests if interest in event_text]
+            person2_matches = [interest for interest in person2_interests if interest in event_text]
+            common_matches = [interest for interest in common_interests if interest in event_text]
+            
+            # Enhanced match score calculation:
+            # - Common interests are worth 3 points
+            # - Individual interests are worth 1 point
+            # - Bonus point if event matches interests from both people
+            match_score = (len(common_matches) * 3) + len(set(person1_matches + person2_matches))
+            if person1_matches and person2_matches:
+                match_score += 1  # Bonus for matching both people's interests
+            
+            # Consider an event relevant if:
+            # 1. It matches at least one common interest, OR
+            # 2. It matches at least one interest from each person
+            if common_matches or (person1_matches and person2_matches):
+                event_copy = event.copy()
+                event_copy.update({
+                    'match_score': match_score,
+                    'common_matches': common_matches,
+                    'person1_matches': person1_matches,
+                    'person2_matches': person2_matches,
+                    'person1_name': person1.name,
+                    'person2_name': person2.name
+                })
+                matching_events.append(event_copy)
         
         if not matching_events:
-            print("No matching events found.")
-        else:
-            print(f"\nFound {len(matching_events)} matching events!")
-            
-        return matching_events
+            print("\nNo matching events found.")
+            print(f"Searched through {len(events)} events across all cities.")
+            print(f"{person1.name}'s interests: {', '.join(person1_interests)}")
+            print(f"{person2.name}'s interests: {', '.join(person2_interests)}")
+            return []
+        
+        # Sort by match score (highest first) and take top 3
+        matching_events.sort(key=lambda x: x['match_score'], reverse=True)
+        top_3_events = matching_events[:3]
+        
+        print(f"\nTop 3 event suggestions for {person1.name} and {person2.name}:")
+        
+        # Save top 3 matching events to a separate JSON file
+        try:
+            with open('top_matching_events.json', 'w', encoding='utf-8') as f:
+                json.dump(top_3_events, f, indent=4, ensure_ascii=False)
+            print("Top matching events saved to top_matching_events.json")
+        except Exception as e:
+            print(f"Error saving matching events: {str(e)}")
+        
+        return top_3_events
 
-def main():
-    # Load person profiles from JSON files
-    try:
-        with open('intern1.json', 'r') as f1, open('intern2.json', 'r') as f2:
-            person1_data = json.load(f1)
-            person2_data = json.load(f2)
-    except FileNotFoundError:
-        print("Error: Make sure both intern1.json and intern2.json exist in the current directory")
-        return
-    except json.JSONDecodeError:
-        print("Error: Invalid JSON format in one of the input files")
-        return
-    
-    try:
-        scraper = LumaEventScraper()
-        person1, person2 = scraper.load_people_profiles(person1_data, person2_data)
-        events = scraper.scrape_events(person1.location)
-        matching_events = scraper.find_matching_events(events, person1, person2)
-        
-        if not matching_events:
-            print("No matching events found.")
+    def display_matching_events(self, events: List[Dict]) -> None:
+        """Display matching events with detailed interest information"""
+        if not events:
             return
             
-        print(f"\nFound {len(matching_events)} events matching {person1_data['name']} and {person2_data['name']}'s interests:\n")
-        
-        for i, event in enumerate(matching_events, 1):
-            print(f"Event {i}:")
+        for i, event in enumerate(events, 1):
+            print(f"\nSuggestion {i} (Match Score: {event['match_score']}):")
             print(f"Title: {event['title']}")
-            print(f"Date: {event['date']}")
+            print(f"City: {event['city']}")
+            print(f"Time: {event['date']}")
             print(f"Location: {event['location']}")
-            print(f"Matching Interests: {', '.join(event['matching_interests'])}")
             print(f"Link: {event['link']}")
-            print()
+            
+            # Display matching interests
+            if event['common_matches']:
+                print(f"Common Interests: {', '.join(event['common_matches'])}")
+            if event['person1_matches']:
+                print(f"{event['person1_name']}'s Matching Interests: {', '.join(event['person1_matches'])}")
+            if event['person2_matches']:
+                print(f"{event['person2_name']}'s Matching Interests: {', '.join(event['person2_matches'])}")
+            print("-" * 80)
+
+def main():
+    """Main function to run the scraper"""
+    try:
+        # Load intern profiles from JSON files
+        try:
+            with open('intern1.json', 'r') as f1, open('intern2.json', 'r') as f2:
+                person1_data = json.load(f1)
+                person2_data = json.load(f2)
+        except FileNotFoundError:
+            print("Error: Make sure both intern1.json and intern2.json exist in the current directory")
+            return
+        except json.JSONDecodeError:
+            print("Error: Invalid JSON format in one of the input files")
+            return
+
+        scraper = LumaEventScraper()
+        person1, person2 = scraper.load_people_profiles(person1_data, person2_data)
+        
+        # Get events from both locations
+        events = []
+        for person in [person1, person2]:
+            location_events = scraper.scrape_events(person.location)
+            events.extend(location_events)
+        
+        # Find matching events across all locations
+        matching_events = scraper.find_matching_events(events, person1, person2)
+        
+        if matching_events:
+            scraper.display_matching_events(matching_events)
             
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        print(f"Error in main: {str(e)}")
     finally:
         if 'scraper' in locals():
-            del scraper  # This will trigger the __del__ method to clean up the driver
+            scraper.driver.quit()
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,74 @@
+[
+    {
+        "title": "FC SF • Founders Run & Coffee! (Late Night Summer Series)",
+        "date": "5:30 PM",
+        "location": "1808 Wedemeyer St",
+        "city": "San Francisco",
+        "organizers": "By Founders Common, Nikki Heyder & Chris Ashley",
+        "status": "",
+        "attendees": "+354",
+        "link": "https://lu.ma/wz30rbwv",
+        "description": "Organized by By Founders Common, Nikki Heyder & Chris Ashley.  +354 attendees.",
+        "match_score": 9,
+        "person1_matches": [
+            "startup networking",
+            "coffee"
+        ],
+        "person2_matches": [
+            "entrepreneurship",
+            "coffee",
+            "startups"
+        ],
+        "match_explanation": "This event is a great match for both Anna and Jordan because it combines startup networking and entrepreneurship, which aligns with Anna's interest in technology and startup networking, and Jordan's interest in entrepreneurship and startups. Additionally, both share a love for coffee, making this event a perfect fit for their combined interests.",
+        "person1_name": "Anna",
+        "person2_name": "Jordan"
+    },
+    {
+        "title": "Game Changers VIBE CODING HACKATHON",
+        "date": "4:30 PM",
+        "location": "760 Market St floor 9",
+        "city": "San Francisco",
+        "organizers": "By Inworld AI, Lightspeed Venture Partners, Volley, Moritz Baier-Lentz & 1 other",
+        "status": "",
+        "attendees": "",
+        "link": "https://lu.ma/ajcqhtna",
+        "description": "Organized by By Inworld AI, Lightspeed Venture Partners, Volley, Moritz Baier-Lentz & 1 other.   attendees.",
+        "match_score": 8,
+        "person1_matches": [
+            "technology",
+            "artificial intelligence",
+            "hackathons"
+        ],
+        "person2_matches": [
+            "hackathons",
+            "entrepreneurship"
+        ],
+        "match_explanation": "This hackathon is a strong match for both Anna and Jordan. Anna's interests in technology, artificial intelligence, and hackathons align perfectly with the event's focus. Jordan's interest in hackathons and entrepreneurship also makes this event appealing, as hackathons often attract entrepreneurial-minded individuals and provide networking opportunities.",
+        "person1_name": "Anna",
+        "person2_name": "Jordan"
+    },
+    {
+        "title": "Visas, Ventures & AI: Your U.S. Tech Immigration Roadmap",
+        "date": "6:00 PM",
+        "location": "San Francisco, California",
+        "city": "San Francisco",
+        "organizers": "By Anna Turos, Ivanna Wendel, Wtech Lead Partner & Elena Mialik",
+        "status": "",
+        "attendees": "+145",
+        "link": "https://lu.ma/3m7tlgd6",
+        "description": "Organized by By Anna Turos, Ivanna Wendel, Wtech Lead Partner & Elena Mialik.  +145 attendees.",
+        "match_score": 7,
+        "person1_matches": [
+            "technology",
+            "startup networking",
+            "artificial intelligence"
+        ],
+        "person2_matches": [
+            "entrepreneurship",
+            "startups"
+        ],
+        "match_explanation": "This event is a good match for both Anna and Jordan because it focuses on technology, AI, and startups, which aligns with Anna's interests in technology and startup networking, and Jordan's interests in entrepreneurship and startups. The event's focus on tech immigration also provides unique insights that could be valuable for both individuals.",
+        "person1_name": "Anna",
+        "person2_name": "Jordan"
+    }
+]
