@@ -46,27 +46,23 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetail
       className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 hover:scale-[1.02] group"
     >
       {/* Rank Badge */}
-      <div className={`absolute top-4 right-4 w-12 h-12 bg-gradient-to-r ${getRankColor(rank)} rounded-full flex items-center justify-center shadow-lg`}>
-        <span className="text-white font-bold text-lg">{getRankIcon(rank)}</span>
+      <div className={`absolute top-4 right-4 w-10 h-10 bg-gradient-to-r ${getRankColor(rank)} rounded-full flex items-center justify-center shadow-lg`}>
+        <span className="text-white font-bold text-sm">{getRankIcon(rank)}</span>
       </div>
 
       {/* Match Score */}
       <div className="flex items-center gap-2 mb-4">
         <Star className="w-5 h-5 text-yellow-500 fill-current" />
         <span className="text-lg font-semibold text-gray-800">
-          {event.match_score || 'N/A'}/10 Match
+          {event.matchScore || 'N/A'}/10 Match
         </span>
       </div>
 
       {/* Event Title */}
-      <h3 className="text-xl font-bold text-gray-800 mb-3 pr-16 leading-tight group-hover:text-primary-600 transition-colors">
+      <h3 className="text-lg font-bold text-gray-800 mb-3 pr-12 leading-tight group-hover:text-primary-600 transition-colors">
         {event.title}
       </h3>
 
-      {/* Event title */}
-      <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
-        {event.title}
-      </h3>
       <div className="space-y-2 mb-4">
         <div className="flex items-center gap-3 text-gray-600">
           <Clock className="w-4 h-4 text-primary-500 flex-shrink-0" />
@@ -97,47 +93,24 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetail
       <div className="mb-4">
         <p className="text-xs text-gray-500 mb-2">Matching Interests:</p>
         <div className="flex flex-wrap gap-1">
-          {[...event.annaInterests, ...event.jordanInterests]
+          {[...(event.annaInterests || []), ...(event.jordanInterests || [])]
             .filter((interest, index, arr) => arr.indexOf(interest) === index)
             .slice(0, 3)
             .map((interest, index) => (
               <InterestTag key={index} interest={interest} isMatching />
             ))}
-          {([...event.annaInterests, ...event.jordanInterests].filter((interest, index, arr) => arr.indexOf(interest) === index).length > 3) && (
+          {([...(event.annaInterests || []), ...(event.jordanInterests || [])].filter((interest, index, arr) => arr.indexOf(interest) === index).length > 3) && (
             <span className="text-xs text-gray-500 px-2 py-1">
-              +{[...event.annaInterests, ...event.jordanInterests].filter((interest, index, arr) => arr.indexOf(interest) === index).length - 3} more
+              +{[...(event.annaInterests || []), ...(event.jordanInterests || [])].filter((interest, index, arr) => arr.indexOf(interest) === index).length - 3} more
             </span>
           )}
         </div>
       </div>
 
-      {/* Matching Interests */}
-      {(event.person1_matches || event.person2_matches) && (
-        <div className="space-y-3 mb-4">
-          {event.person1_matches && event.person1_matches.length > 0 && (
-            <div>
-              <p className="text-xs font-medium text-gray-600 mb-1">
-                {event.person1_name}'s matching interests:
-              </p>
-              <div className="flex flex-wrap gap-1">
-                {event.person1_matches.map((interest) => (
-                  <span
-                    key={interest}
-                    className="px-2 py-1 bg-primary-100 text-primary-700 rounded-md text-xs"
-                  >
-                    {interest}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Why it matches - condensed */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-3 rounded-lg mb-4">
         <p className="text-sm text-gray-700 line-clamp-2">
-          🎯 {event.whyMatches}
+          🎯 {event.whyMatches || 'Great match based on your shared interests!'}
         </p>
       </div>
 
@@ -145,7 +118,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetail
       <div className="flex gap-2">
         <button
           onClick={() => onViewDetails(event)}
-          className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
+          className="flex-1 bg-gray-100 text-gray-700 py-2 px-3 rounded-lg font-medium hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 text-sm"
         >
           <Eye className="w-4 h-4" />
           Details
@@ -154,7 +127,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetail
           href={event.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 text-center"
+          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 text-center text-sm"
         >
           View on Luma
         </a>
