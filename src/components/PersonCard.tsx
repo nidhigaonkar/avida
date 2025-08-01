@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { MapPinIcon, BuildingOfficeIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { MapPin, Building, User, Heart, Sparkles } from 'lucide-react';
 import { Person } from '../types';
 import { InterestTag } from './InterestTag';
 
@@ -25,7 +25,7 @@ export default function PersonCard({ person, index }: PersonCardProps) {
         <div>
           <h3 className="text-xl font-semibold text-gray-800">{person.name}</h3>
           <div className="flex items-center gap-1 text-gray-600">
-            <SparklesIcon className="w-4 h-4" />
+            <Sparkles className="w-4 h-4" />
             <span>Age {person.age}</span>
           </div>
         </div>
