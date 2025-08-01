@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
-import { FunnelIcon } from '@heroicons/react/24/outline';
+import { Filter } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import Header from './components/Header';
 import PersonCard from './components/PersonCard';
-import EventList from './components/EventList';
+import { EventList } from './components/EventList';
 import StatsSection from './components/StatsSection';
 import LoadingSpinner from './components/LoadingSpinner';
 import { FilterPanel } from './components/FilterPanel';
@@ -163,7 +163,7 @@ function App() {
               onClick={() => setIsFilterOpen(true)}
               className="flex items-center gap-2 px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl hover:bg-white transition-all duration-200 shadow-sm hover:shadow-md"
             >
-              <FunnelIcon className="w-5 h-5 text-gray-600" />
+              <Filter className="w-5 h-5 text-gray-600" />
               <span className="font-medium text-gray-700">Filters</span>
               {(filters.minScore > 0 || filters.cities.length < availableCities.length || filters.status.length < availableStatuses.length) && (
                 <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
