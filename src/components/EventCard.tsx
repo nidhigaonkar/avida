@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
-import { MapPinIcon, ClockIcon, UserGroupIcon, EyeIcon } from '@heroicons/react/24/outline';
+import { MapPin, Clock, Users, Eye, Star } from 'lucide-react';
 import { MatchedEvent } from '../types';
 import { InterestTag } from './InterestTag';
+import { Event } from '../types';
 
 interface EventCardProps {
   event: MatchedEvent;
@@ -10,7 +11,7 @@ interface EventCardProps {
   rank: number;
 }
 
-export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetails }) => {
+export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetails, rank }) => {
   const getStatusColor = (status: string) => {
     if (status.toLowerCase().includes('sold out')) return 'bg-red-100 text-red-700 border-red-200';
     if (status.toLowerCase().includes('near capacity')) return 'bg-orange-100 text-orange-700 border-orange-200';
@@ -146,7 +147,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetail
           onClick={() => onViewDetails(event)}
           className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
         >
-          <EyeIcon className="w-4 h-4" />
+          <Eye className="w-4 h-4" />
           Details
         </button>
         <a
@@ -161,3 +162,5 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetail
     </motion.div>
   );
 }
+
+export default EventCard
