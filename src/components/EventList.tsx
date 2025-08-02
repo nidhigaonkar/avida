@@ -17,11 +17,11 @@ export const EventList: React.FC<EventListProps> = ({ events, onEventSelect }) =
         animate={{ opacity: 1 }}
         className="text-center py-16"
       >
-        <div className="w-24 h-24 bg-sunshine/20 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-dashed border-sunshine">
-          <Calendar className="w-12 h-12 text-brown" />
+        <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-dashed border-white/30">
+          <Calendar className="w-12 h-12 text-white/60" />
         </div>
-        <h3 className="text-3xl handwritten text-brown mb-4">No Events Found</h3>
-        <p className="text-brown/80 max-w-md mx-auto text-lg">
+        <h3 className="text-3xl font-bold text-white mb-4">No Events Found</h3>
+        <p className="text-purple-200 max-w-md mx-auto text-lg">
           Try adjusting your locations or interests to find matching events in your area.
         </p>
       </motion.div>
@@ -39,16 +39,16 @@ export const EventList: React.FC<EventListProps> = ({ events, onEventSelect }) =
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center scrapbook-card"
+        className="text-center glass-card rounded-2xl p-8"
       >
         <div className="flex items-center justify-center gap-4 mb-4">
           <span className="text-4xl">🏆</span>
-          <h2 className="text-4xl handwritten text-brown transform -rotate-1">
+          <h2 className="text-4xl font-bold text-white">
             Perfect Event Matches
           </h2>
           <span className="text-4xl">🎉</span>
         </div>
-        <p className="text-lg text-brown max-w-2xl mx-auto">
+        <p className="text-lg text-purple-100 max-w-2xl mx-auto">
           Here are the best events for both of you to attend together, ranked by compatibility
         </p>
       </motion.div>

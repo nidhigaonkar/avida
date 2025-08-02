@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
-import Header from './components/Header';
-import { ProfileSection } from './components/ProfileSection';
-import { HowItWorks } from './components/HowItWorks';
-import { Footer } from './components/Footer';
+import PersonCard from './components/PersonCard';
+import StatsSection from './components/StatsSection';
 import { ProfileData } from './components/ProfileForm';
 import { FindEventsButton } from './components/FindEventsButton';
 import { EventList } from './components/EventList';
 import { EventModal } from './components/EventModal';
-import { MatchedEvent, Event } from './types';
+import { MatchedEvent, Event, Person } from './types';
 
 function App() {
-  const [currentView, setCurrentView] = useState<'landing' | 'app'>('landing');
   const [profile1, setProfile1] = useState<ProfileData>({
     name: '',
     age: 18,
@@ -35,6 +32,41 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
+  // Load default data from JSON files
+  React.useEffect(() => {
+    const loadDefaultData = async () => {
+      try {
+        const [person1Response, person2Response] = await Promise.all([
+          fetch('/intern1.json'),
+          fetch('/intern2.json')
+        ]);
+        
+        const person1Data = await person1Response.json();
+        const person2Data = await person2Response.json();
+        
+        setProfile1({
+          name: person1Data.name,
+          age: person1Data.age,
+          location: person1Data.location,
+          company: person1Data.company,
+          interests: person1Data.interests
+        });
+        
+        setProfile2({
+          name: person2Data.name,
+          age: person2Data.age,
+          location: person2Data.location,
+          company: person2Data.company,
+          interests: person2Data.interests
+        });
+      } catch (error) {
+        console.error('Error loading default data:', error);
+      }
+    };
+
+    loadDefaultData();
+  }, []);
+
   const isFormValid = (profile: ProfileData) => {
     return profile.name.trim() && 
            profile.location.trim() && 
@@ -43,10 +75,6 @@ function App() {
   };
 
   const canSearch = isFormValid(profile1) && isFormValid(profile2);
-
-  const handleGetStarted = () => {
-    setCurrentView('app');
-  };
 
   const findEvents = async () => {
     if (!canSearch) return;
@@ -121,55 +149,72 @@ function App() {
     setIsModalOpen(true);
   };
 
-  if (currentView === 'landing') {
-    return (
-      <div className="min-h-screen">
-        <Toaster position="top-right" />
-        
-        {/* Landing Page */}
-        <Header onGetStarted={handleGetStarted} />
-        <HowItWorks />
-        <Footer />
-      </div>
-    );
-  }
+  // Convert ProfileData to Person for PersonCard component
+  const person1: Person = {
+    name: profile1.name,
+    age: profile1.age,
+    location: profile1.location,
+    company: profile1.company,
+    interests: profile1.interests
+  };
+
+  const person2: Person = {
+    name: profile2.name,
+    age: profile2.age,
+    location: profile2.location,
+    company: profile2.company,
+    interests: profile2.interests
+  };
+
+  const totalEvents = 50; // Mock total events
+  const cities = ['New York', 'San Francisco']; // Mock cities
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen text-white">
       <Toaster position="top-right" />
       
-      {/* App View */}
-      <div className="max-w-6xl mx-auto px-5 py-8">
-        {/* Back to Landing */}
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          onClick={() => setCurrentView('landing')}
-          className="mb-8 px-4 py-2 text-brown hover:text-coral transition-colors flex items-center gap-2"
-        >
-          ← Back to Home
-        </motion.button>
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center py-12"
+      >
+        <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+          Avida
+        </h1>
+        <p className="text-xl text-purple-100 mb-2">
+          AI-Powered Event Matching for Perfect Adventures Together
+        </p>
+        <p className="text-lg text-purple-200">
+          Find events that match both of your interests and create amazing memories
+        </p>
+      </motion.div>
 
-        {/* Profile Section */}
-        <ProfileSection
-          profile1={profile1}
-          profile2={profile2}
-          setProfile1={setProfile1}
-          setProfile2={setProfile2}
+      <div className="max-w-6xl mx-auto px-6">
+        {/* Stats Section */}
+        <StatsSection 
+          totalEvents={totalEvents}
+          matchedEvents={events.length}
+          cities={cities}
         />
 
-        {/* Find Events Button */}
+        {/* Profile Cards */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.2 }}
+          className="grid md:grid-cols-2 gap-8 mb-12"
         >
-          <FindEventsButton
-            onClick={findEvents}
-            disabled={!canSearch}
-            loading={loading}
-          />
+          <PersonCard person={person1} index={0} />
+          <PersonCard person={person2} index={1} />
         </motion.div>
+
+        {/* Find Events Button */}
+        <FindEventsButton
+          onClick={findEvents}
+          disabled={!canSearch}
+          loading={loading}
+        />
 
         {/* Events Section */}
         {(hasSearched || events.length > 0) && (
