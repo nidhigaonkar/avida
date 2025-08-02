@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Users, MapPin } from 'lucide-react';
 
