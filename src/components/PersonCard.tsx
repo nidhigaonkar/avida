@@ -1,14 +1,16 @@
+import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Building, User, Heart, Sparkles } from 'lucide-react';
+import { MapPin, Building, User, Heart, Sparkles, Edit3 } from 'lucide-react';
 import { Person } from '../types';
 import { InterestTag } from './InterestTag';
 
 interface PersonCardProps {
   person: Person;
   index: number;
+  onEdit: () => void;
 }
 
-export default function PersonCard({ person, index }: PersonCardProps) {
+export default function PersonCard({ person, index, onEdit }: PersonCardProps) {
   const avatarColors = person.name === 'Anna' ? 'from-pink-400 to-purple-500' : 'from-blue-400 to-indigo-500';
 
   return (
@@ -18,6 +20,18 @@ export default function PersonCard({ person, index }: PersonCardProps) {
       transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
       className="glass-card rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
     >
+      {/* Edit Button */}
+      <div className="flex justify-end mb-4">
+        <motion.button
+          onClick={onEdit}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="p-2 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-200"
+        >
+          <Edit3 className="w-4 h-4 text-white" />
+        </motion.button>
+      </div>
+      
       <div className="flex items-center gap-4 mb-6">
         <div className={`w-16 h-16 bg-gradient-to-r ${avatarColors} rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg`}>
           <User className="w-8 h-8 text-white" />

@@ -3,13 +3,14 @@ import { motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import PersonCard from './components/PersonCard';
 import StatsSection from './components/StatsSection';
-import { ProfileData } from './components/ProfileForm';
+import { ProfileForm, ProfileData } from './components/ProfileForm';
 import { FindEventsButton } from './components/FindEventsButton';
 import { EventList } from './components/EventList';
 import { EventModal } from './components/EventModal';
 import { MatchedEvent, Event, Person } from './types';
 
 function App() {
+  const [editingProfile, setEditingProfile] = useState<number | null>(null);
   const [profile1, setProfile1] = useState<ProfileData>({
     name: '',
     age: 18,
@@ -205,8 +206,37 @@ function App() {
           transition={{ delay: 0.2 }}
           className="grid md:grid-cols-2 gap-8 mb-12"
         >
-          <PersonCard person={person1} index={0} />
-          <PersonCard person={person2} index={1} />
+          {editingProfile === 0 ? (
+            <ProfileForm
+              title="Person 1"
+              profile={profile1}
+              onProfileChange={setProfile1}
+              personNumber={0}
+              onSave={() => setEditingProfile(null)}
+            />
+          ) : (
+            <PersonCard 
+              person={person1} 
+              index={0} 
+              onEdit={() => setEditingProfile(0)}
+            />
+          )}
+          
+          {editingProfile === 1 ? (
+            <ProfileForm
+              title="Person 2"
+              profile={profile2}
+              onProfileChange={setProfile2}
+              personNumber={1}
+              onSave={() => setEditingProfile(null)}
+            />
+          ) : (
+            <PersonCard 
+              person={person2} 
+              index={1} 
+              onEdit={() => setEditingProfile(1)}
+            />
+          )}
         </motion.div>
 
         {/* Find Events Button */}
