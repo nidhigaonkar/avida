@@ -47,7 +47,7 @@ function App() {
     setHasSearched(true);
 
     try {
-      // Simulate API call to find matching events
+      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Load events from the existing data files
@@ -57,8 +57,7 @@ function App() {
       // Create mock matched events with AI-style scoring
       const mockMatches: MatchedEvent[] = allEvents.slice(0, 6).map((event: any, index: number) => ({
         ...event,
-        matchScore: Math.floor(Math.random() * 4) + 7, // Score between 7-10
-        rank: index + 1,
+        matchScore: Math.floor(Math.random() * 3) + 8, // Score between 8-10
         whyMatches: generateWhyMatches(event, profile1, profile2),
         annaInterests: getMatchingInterests(profile1.interests, event),
         jordanInterests: getMatchingInterests(profile2.interests, event),
@@ -78,7 +77,6 @@ function App() {
   };
 
   const generateWhyMatches = (event: any, person1: ProfileData, person2: ProfileData) => {
-    const allInterests = [...person1.interests, ...person2.interests];
     const eventTitle = event.title.toLowerCase();
     
     if (eventTitle.includes('tech') || eventTitle.includes('ai')) {
@@ -116,37 +114,37 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Toaster position="top-right" />
       <Header />
       
-      <main className="max-w-6xl mx-auto px-4 pb-16">
+      <main className="max-w-7xl mx-auto px-4 py-12">
         {/* Profile Forms Section */}
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="mb-12"
+          transition={{ delay: 0.2 }}
+          className="mb-16"
         >
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Create Your Profiles
             </h2>
-            <p className="text-gray-600">
-              Fill out both profiles to find the perfect events for you to attend together
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Fill out both profiles to discover events that match your combined interests and preferences
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
             <ProfileForm
               title="Person 1"
               onProfileChange={setProfile1}
-              gradient="from-pink-400 to-purple-500"
+              gradient="from-pink-500 to-rose-500"
             />
             <ProfileForm
               title="Person 2"
               onProfileChange={setProfile2}
-              gradient="from-blue-400 to-indigo-500"
+              gradient="from-blue-500 to-indigo-500"
             />
           </div>
         </motion.section>
@@ -155,8 +153,8 @@ function App() {
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="mb-12"
+          transition={{ delay: 0.4 }}
+          className="mb-16"
         >
           <FindEventsButton
             onClick={findEvents}
@@ -170,19 +168,9 @@ function App() {
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
+            transition={{ delay: 0.6 }}
           >
-            {events.length > 0 ? (
-              <EventList events={events} onEventSelect={handleEventSelect} />
-            ) : hasSearched && !loading ? (
-              <div className="text-center py-16">
-                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Search className="w-8 h-8 text-gray-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">No Events Found</h3>
-                <p className="text-gray-500">Try different locations or interests to find matching events.</p>
-              </div>
-            ) : null}
+            <EventList events={events} onEventSelect={handleEventSelect} />
           </motion.section>
         )}
       </main>

@@ -1,76 +1,57 @@
+import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Clock, Users, Eye, Star } from 'lucide-react';
-import { MatchedEvent } from '../types';
-import { InterestTag } from './InterestTag';
-import { Event } from '../types';
+import { MapPin, Clock, Users, ExternalLink, Star } from 'lucide-react';
+import { MatchedEvent, Event } from '../types';
 
 interface EventCardProps {
   event: MatchedEvent;
   index: number;
   onViewDetails: (event: Event) => void;
-  rank: number;
 }
 
-export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetails, rank }) => {
+export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetails }) => {
   const getStatusColor = (status: string) => {
-    if (status.toLowerCase().includes('sold out')) return 'bg-red-100 text-red-700 border-red-200';
-    if (status.toLowerCase().includes('near capacity')) return 'bg-orange-100 text-orange-700 border-orange-200';
-    if (status.toLowerCase().includes('waitlist')) return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-    if (status.includes('$')) return 'bg-green-100 text-green-700 border-green-200';
-    return 'bg-blue-100 text-blue-700 border-blue-200';
-  };
-
-  const getRankColor = (rank: number) => {
-    switch (rank) {
-      case 1: return 'from-yellow-400 to-yellow-500';
-      case 2: return 'from-gray-300 to-gray-400';
-      case 3: return 'from-amber-600 to-amber-700';
-      default: return 'from-primary-400 to-primary-500';
-    }
-  };
-
-  const getRankIcon = (rank: number) => {
-    switch (rank) {
-      case 1: return '🥇';
-      case 2: return '🥈';
-      case 3: return '🥉';
-      default: return '⭐';
-    }
+    if (status.toLowerCase().includes('sold out')) return 'bg-red-50 text-red-700 border-red-200';
+    if (status.toLowerCase().includes('near capacity')) return 'bg-orange-50 text-orange-700 border-orange-200';
+    if (status.toLowerCase().includes('waitlist')) return 'bg-yellow-50 text-yellow-700 border-yellow-200';
+    if (status.includes('$')) return 'bg-green-50 text-green-700 border-green-200';
+    return 'bg-blue-50 text-blue-700 border-blue-200';
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.2, duration: 0.6 }}
-      className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 hover:scale-[1.02] group"
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+      className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200 group"
     >
-      {/* Rank Badge */}
-      <div className={`absolute top-4 right-4 w-10 h-10 bg-gradient-to-r ${getRankColor(rank)} rounded-full flex items-center justify-center shadow-lg`}>
-        <span className="text-white font-bold text-sm">{getRankIcon(rank)}</span>
-      </div>
-
       {/* Match Score */}
-      <div className="flex items-center gap-2 mb-4">
-        <Star className="w-5 h-5 text-yellow-500 fill-current" />
-        <span className="text-lg font-semibold text-gray-800">
-          {event.matchScore || 'N/A'}/10 Match
-        </span>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Star className="w-5 h-5 text-yellow-500 fill-current" />
+          <span className="text-lg font-bold text-gray-900">
+            {event.matchScore || 8}/10 Match
+          </span>
+        </div>
+        <div className="text-sm text-gray-500 font-medium">
+          #{index + 1}
+        </div>
       </div>
 
       {/* Event Title */}
-      <h3 className="text-lg font-bold text-gray-800 mb-3 pr-12 leading-tight group-hover:text-primary-600 transition-colors">
+      <h3 className="text-xl font-bold text-gray-900 mb-4 leading-tight group-hover:text-blue-600 transition-colors">
         {event.title}
       </h3>
 
-      <div className="space-y-2 mb-4">
+      {/* Event Details */}
+      <div className="space-y-3 mb-6">
         <div className="flex items-center gap-3 text-gray-600">
-          <Clock className="w-4 h-4 text-primary-500 flex-shrink-0" />
+          <Clock className="w-4 h-4 text-blue-500 flex-shrink-0" />
           <span className="text-sm">{event.date}</span>
         </div>
         
         <div className="flex items-center gap-3 text-gray-600">
-          <MapPin className="w-4 h-4 text-accent-500 flex-shrink-0" />
+          <MapPin className="w-4 h-4 text-purple-500 flex-shrink-0" />
           <span className="text-sm">{event.location}</span>
         </div>
         
@@ -89,51 +70,43 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetail
         </div>
       )}
 
-      {/* Matching interests preview */}
-      <div className="mb-4">
-        <p className="text-xs text-gray-500 mb-2">Matching Interests:</p>
-        <div className="flex flex-wrap gap-1">
-          {[...(event.annaInterests || []), ...(event.jordanInterests || [])]
-            .filter((interest, index, arr) => arr.indexOf(interest) === index)
-            .slice(0, 3)
-            .map((interest, index) => (
-              <InterestTag key={index} interest={interest} isMatching />
-            ))}
-          {([...(event.annaInterests || []), ...(event.jordanInterests || [])].filter((interest, index, arr) => arr.indexOf(interest) === index).length > 3) && (
-            <span className="text-xs text-gray-500 px-2 py-1">
-              +{[...(event.annaInterests || []), ...(event.jordanInterests || [])].filter((interest, index, arr) => arr.indexOf(interest) === index).length - 3} more
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Why it matches - condensed */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-3 rounded-lg mb-4">
-        <p className="text-sm text-gray-700 line-clamp-2">
+      {/* Why it matches */}
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl mb-6">
+        <p className="text-sm text-gray-700 font-medium">
           🎯 {event.whyMatches || 'Great match based on your shared interests!'}
         </p>
       </div>
 
-      {/* Action buttons */}
-      <div className="flex gap-2">
-        <button
-          onClick={() => onViewDetails(event)}
-          className="flex-1 bg-gray-100 text-gray-700 py-2 px-3 rounded-lg font-medium hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 text-sm"
-        >
-          <Eye className="w-4 h-4" />
-          Details
-        </button>
-        <a
-          href={event.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 text-center text-sm"
-        >
-          View on Luma
-        </a>
-      </div>
+      {/* Matching interests */}
+      {(event.annaInterests?.length || event.jordanInterests?.length) && (
+        <div className="mb-6">
+          <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Matching Interests</p>
+          <div className="flex flex-wrap gap-2">
+            {[...(event.annaInterests || []), ...(event.jordanInterests || [])]
+              .filter((interest, index, arr) => arr.indexOf(interest) === index)
+              .slice(0, 4)
+              .map((interest, index) => (
+                <span
+                  key={index}
+                  className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium border border-green-200"
+                >
+                  {interest}
+                </span>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {/* Action Button */}
+      <a
+        href={event.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2 group"
+      >
+        <ExternalLink className="w-5 h-5 group-hover:scale-110 transition-transform" />
+        View Event on Luma
+      </a>
     </motion.div>
   );
-}
-
-export default EventCard
+};
