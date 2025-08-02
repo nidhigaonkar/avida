@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { X } from 'lucide-react';
 
 export interface ProfileData {
   name: string;
@@ -53,119 +54,116 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: personNumber * 0.2 }}
-      className="glass-card rounded-2xl p-6"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+      className="scrapbook-card bg-white p-6 w-full max-w-md"
     >
       <div className="flex items-center justify-between mb-6">
-        <div>
-          <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
-          <p className="text-purple-200">Fill out your profile details</p>
-        </div>
+        <h3 className="text-2xl font-black text-gray-900 uppercase tracking-wide">{title}</h3>
         {onSave && (
           <motion.button
             onClick={onSave}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-medium hover:shadow-lg transition-all duration-200"
+            className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-bold uppercase text-sm"
           >
             Save
           </motion.button>
         )}
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-4">
         {/* Name */}
         <div>
-          <label className="block text-sm font-medium text-purple-200 mb-2">Full Name</label>
+          <label className="block text-sm font-black text-gray-900 mb-1 uppercase">Name</label>
           <input
             type="text"
             value={profile.name}
             onChange={(e) => handleInputChange('name', e.target.value)}
-            placeholder="Enter your full name"
-            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+            placeholder="Enter full name"
+            className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
           />
         </div>
 
         {/* Age */}
         <div>
-          <label className="block text-sm font-medium text-purple-200 mb-2">Age</label>
+          <label className="block text-sm font-black text-gray-900 mb-1 uppercase">Age</label>
           <input
             type="number"
             min="16"
             max="100"
             value={profile.age}
             onChange={(e) => handleInputChange('age', parseInt(e.target.value) || 18)}
-            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+            className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
           />
         </div>
 
         {/* Location */}
         <div>
-          <label className="block text-sm font-medium text-purple-200 mb-2">📍 Location</label>
+          <label className="block text-sm font-black text-gray-900 mb-1 uppercase">Location</label>
           <input
             type="text"
             value={profile.location}
             onChange={(e) => handleInputChange('location', e.target.value)}
             placeholder="e.g., New York, NY"
-            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+            className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
           />
         </div>
 
         {/* Company */}
         <div>
-          <label className="block text-sm font-medium text-purple-200 mb-2">🏢 Company/Organization</label>
+          <label className="block text-sm font-black text-gray-900 mb-1 uppercase">Company</label>
           <input
             type="text"
             value={profile.company}
             onChange={(e) => handleInputChange('company', e.target.value)}
             placeholder="e.g., Tech Corp"
-            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+            className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
           />
         </div>
 
         {/* Interests */}
         <div>
-          <label className="block text-sm font-medium text-purple-200 mb-2">Interests & Hobbies</label>
-          <div className="flex gap-2 mb-3">
+          <label className="block text-sm font-black text-gray-900 mb-1 uppercase">Interests</label>
+          <div className="flex gap-2 mb-2">
             <input
               type="text"
               value={newInterest}
               onChange={(e) => setNewInterest(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Add an interest (e.g., cooking, hiking)"
-              className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+              placeholder="Add interest"
+              className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-pink-500 focus:outline-none transition-colors text-sm"
             />
             <button
               onClick={addInterest}
-              className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-200"
+              className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-bold text-sm uppercase"
             >
               Add
             </button>
           </div>
           
           {/* Interest Tags */}
-          <div className="flex flex-wrap gap-2">
-            {profile.interests.map((interest, index) => (
+          <div className="flex flex-wrap gap-1">
+            {profile.interests.map((interest) => (
               <motion.div
                 key={interest}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-full text-sm font-medium"
+                className="flex items-center gap-1 px-2 py-1 bg-pink-100 text-pink-800 rounded text-xs font-bold uppercase"
               >
                 {interest}
                 <button
                   onClick={() => removeInterest(interest)}
-                  className="ml-1 text-white hover:text-red-200 transition-colors"
+                  className="text-pink-600 hover:text-pink-800"
                 >
-                  ×
+                  <X className="w-3 h-3" />
                 </button>
               </motion.div>
             ))}
             {profile.interests.length === 0 && (
-              <p className="text-purple-300 text-sm italic">
-                Add interests to help us find perfect events for you! ✨
+              <p className="text-gray-500 text-sm italic">
+                Add interests to find perfect events
               </p>
             )}
           </div>

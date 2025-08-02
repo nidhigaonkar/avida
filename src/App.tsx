@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import PersonCard from './components/PersonCard';
-import StatsSection from './components/StatsSection';
 import { ProfileForm, ProfileData } from './components/ProfileForm';
 import { FindEventsButton } from './components/FindEventsButton';
 import { EventList } from './components/EventList';
@@ -167,205 +166,157 @@ function App() {
     interests: profile2.interests
   };
 
-  const totalEvents = 50; // Mock total events
-  const cities = ['New York', 'San Francisco']; // Mock cities
-
   return (
-    <div className="min-h-screen text-white">
+    <div className="min-h-screen bg-black relative overflow-hidden">
       <Toaster position="top-right" />
       
+      {/* Background Elements */}
+      <div className="fixed inset-0 bg-grunge">
+        {/* Paint splatters */}
+        <div className="paint-splatter w-32 h-32 top-20 left-10" />
+        <div className="paint-splatter w-24 h-24 top-60 right-20" />
+        <div className="paint-splatter w-40 h-40 bottom-40 left-1/4" />
+        
+        {/* Geometric shapes */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute top-32 right-32 w-16 h-16 border-4 border-pink-500 opacity-30"
+        />
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-32 left-32 w-20 h-20 border-4 border-white opacity-20 rounded-full"
+        />
+      </div>
+
       {/* Header */}
-      <div className="text-center py-16 relative overflow-hidden">
-        {/* Floating background elements */}
+      <div className="relative z-10 text-center py-20">
         <motion.div
-          animate={{
-            y: [0, -20, 0],
-            rotate: [0, 5, 0],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute top-10 left-1/4 w-32 h-32 bg-white/5 rounded-full blur-xl"
-        />
-        <motion.div
-          animate={{
-            y: [0, 15, 0],
-            rotate: [0, -3, 0],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
-          className="absolute top-20 right-1/3 w-24 h-24 bg-purple-300/10 rounded-full blur-lg"
-        />
-        <motion.div
-          animate={{
-            y: [0, -10, 0],
-            x: [0, 10, 0],
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 4
-          }}
-          className="absolute bottom-10 left-1/3 w-20 h-20 bg-pink-300/10 rounded-full blur-lg"
-        />
-
-        {/* Main content */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative z-10"
+          transition={{ duration: 0.8 }}
+          className="relative"
         >
-          {/* Logo/Brand */}
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="mb-6"
-          >
-            <motion.h1 
-              className="text-7xl font-bold mb-2 bg-gradient-to-r from-white via-purple-100 to-pink-200 bg-clip-text text-transparent"
-              animate={{
-                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-              style={{
-                backgroundSize: '200% 200%'
-              }}
-            >
-              Avida
-            </motion.h1>
+          <h1 className="text-8xl md:text-9xl grunge-text text-white mb-4 relative">
+            AVIDA
             <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: '100px' }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="absolute bottom-0 left-0 w-full h-2 bg-pink-500 origin-left"
             />
-          </motion.div>
-
-          {/* Tagline */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mb-8"
+          </h1>
+          
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="text-xl text-pink-400 font-bold tracking-wider"
           >
-            <motion.p 
-              className="text-2xl text-purple-100 mb-3 font-medium"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              AI-Powered Event Matching
-            </motion.p>
-            <motion.p 
-              className="text-lg text-purple-200 max-w-2xl mx-auto leading-relaxed"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-            >
-              Discover perfect events that match both of your interests. 
-              Create unforgettable experiences together with intelligent recommendations.
-            </motion.p>
-          </motion.div>
-
-          {/* Feature badges */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.0 }}
-            className="flex flex-wrap justify-center gap-4 mb-8"
-          >
-            {['AI-Powered', 'Perfect Matches', 'Real Events'].map((badge, index) => (
-              <motion.span
-                key={badge}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 1.2 + index * 0.1 }}
-                whileHover={{ scale: 1.05, y: -2 }}
-                className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-sm font-medium text-white hover:bg-white/20 transition-all duration-200"
-              >
-                {badge}
-              </motion.span>
-            ))}
-          </motion.div>
+            EVENT MATCHER
+          </motion.p>
         </motion.div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6">
-        {/* Stats Section */}
-        <StatsSection 
-          totalEvents={totalEvents}
-          matchedEvents={events.length}
-          cities={cities}
-        />
-
-        {/* Profile Cards */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        {/* Profile Cards - Scrapbook Style */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-8 mb-12"
+          transition={{ delay: 0.4 }}
+          className="relative mb-20"
         >
-          {editingProfile === 0 ? (
-            <ProfileForm
-              title="Person 1"
-              profile={profile1}
-              onProfileChange={setProfile1}
-              personNumber={0}
-              onSave={() => setEditingProfile(null)}
-            />
-          ) : (
-            <PersonCard 
-              person={person1} 
-              index={0} 
-              onEdit={() => setEditingProfile(0)}
-            />
-          )}
-          
-          {editingProfile === 1 ? (
-            <ProfileForm
-              title="Person 2"
-              profile={profile2}
-              onProfileChange={setProfile2}
-              personNumber={1}
-              onSave={() => setEditingProfile(null)}
-            />
-          ) : (
-            <PersonCard 
-              person={person2} 
-              index={1} 
-              onEdit={() => setEditingProfile(1)}
-            />
-          )}
+          {/* Person 1 Card */}
+          <motion.div
+            initial={{ opacity: 0, x: -100, rotate: -10 }}
+            animate={{ opacity: 1, x: 0, rotate: -2 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="absolute left-0 top-0 z-20"
+          >
+            {editingProfile === 0 ? (
+              <div className="w-96">
+                <ProfileForm
+                  title="Person 1"
+                  profile={profile1}
+                  onProfileChange={setProfile1}
+                  personNumber={0}
+                  onSave={() => setEditingProfile(null)}
+                />
+              </div>
+            ) : (
+              <div className="scrapbook-card tape-effect">
+                <PersonCard 
+                  person={person1} 
+                  index={0} 
+                  onEdit={() => setEditingProfile(0)}
+                />
+              </div>
+            )}
+          </motion.div>
+
+          {/* Person 2 Card */}
+          <motion.div
+            initial={{ opacity: 0, x: 100, rotate: 10 }}
+            animate={{ opacity: 1, x: 0, rotate: 1.5 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="absolute right-0 top-20 z-20"
+          >
+            {editingProfile === 1 ? (
+              <div className="w-96">
+                <ProfileForm
+                  title="Person 2"
+                  profile={profile2}
+                  onProfileChange={setProfile2}
+                  personNumber={1}
+                  onSave={() => setEditingProfile(null)}
+                />
+              </div>
+            ) : (
+              <div className="scrapbook-card tape-effect">
+                <PersonCard 
+                  person={person2} 
+                  index={1} 
+                  onEdit={() => setEditingProfile(1)}
+                />
+              </div>
+            )}
+          </motion.div>
+
+          {/* Spacer for absolute positioned cards */}
+          <div className="h-96" />
         </motion.div>
 
         {/* Find Events Button */}
-        <FindEventsButton
-          onClick={findEvents}
-          disabled={!canSearch}
-          loading={loading}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.0 }}
+          className="text-center mb-20"
+        >
+          <FindEventsButton
+            onClick={findEvents}
+            disabled={!canSearch}
+            loading={loading}
+          />
+        </motion.div>
 
         {/* Events Section */}
         {(hasSearched || events.length > 0) && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mt-12"
+            className="mb-20"
           >
+            <motion.h2
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.8 }}
+              className="text-6xl grunge-text text-white mb-12 text-center"
+            >
+              PERFECT MATCHES
+            </motion.h2>
             <EventList events={events} onEventSelect={handleEventSelect} />
           </motion.div>
         )}
