@@ -175,21 +175,161 @@ function App() {
       <Toaster position="top-right" />
       
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center py-12"
-      >
-        <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
-          Avida
-        </h1>
-        <p className="text-xl text-purple-100 mb-2">
-          AI-Powered Event Matching for Perfect Adventures Together
-        </p>
-        <p className="text-lg text-purple-200">
-          Find events that match both of your interests and create amazing memories
-        </p>
-      </motion.div>
+      <div className="text-center py-16 relative overflow-hidden">
+        {/* Floating background elements */}
+        <motion.div
+          animate={{
+            y: [0, -20, 0],
+            rotate: [0, 5, 0],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-10 left-1/4 w-32 h-32 bg-white/5 rounded-full blur-xl"
+        />
+        <motion.div
+          animate={{
+            y: [0, 15, 0],
+            rotate: [0, -3, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+          className="absolute top-20 right-1/3 w-24 h-24 bg-purple-300/10 rounded-full blur-lg"
+        />
+        <motion.div
+          animate={{
+            y: [0, -10, 0],
+            x: [0, 10, 0],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 4
+          }}
+          className="absolute bottom-10 left-1/3 w-20 h-20 bg-pink-300/10 rounded-full blur-lg"
+        />
+
+        {/* Main content */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative z-10"
+        >
+          {/* Logo/Brand */}
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+            className="mb-6"
+          >
+            <motion.h1 
+              className="text-7xl font-bold mb-2 bg-gradient-to-r from-white via-purple-100 to-pink-200 bg-clip-text text-transparent"
+              animate={{
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+              style={{
+                backgroundSize: '200% 200%'
+              }}
+            >
+              Avida
+            </motion.h1>
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: '100px' }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full"
+            />
+          </motion.div>
+
+          {/* Tagline */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mb-8"
+          >
+            <motion.p 
+              className="text-2xl text-purple-100 mb-3 font-medium"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              AI-Powered Event Matching
+            </motion.p>
+            <motion.p 
+              className="text-lg text-purple-200 max-w-2xl mx-auto leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+            >
+              Discover perfect events that match both of your interests. 
+              Create unforgettable experiences together with intelligent recommendations.
+            </motion.p>
+          </motion.div>
+
+          {/* Feature badges */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.0 }}
+            className="flex flex-wrap justify-center gap-4 mb-8"
+          >
+            {['🤖 AI-Powered', '🎯 Perfect Matches', '🌟 Real Events'].map((badge, index) => (
+              <motion.span
+                key={badge}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 1.2 + index * 0.1 }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-sm font-medium text-white hover:bg-white/20 transition-all duration-200"
+              >
+                {badge}
+              </motion.span>
+            ))}
+          </motion.div>
+
+          {/* Scroll indicator */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.5 }}
+            className="flex justify-center"
+          >
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center"
+            >
+              <motion.div
+                animate={{ y: [0, 12, 0] }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="w-1 h-3 bg-white/60 rounded-full mt-2"
+              />
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </div>
 
       <div className="max-w-6xl mx-auto px-6">
         {/* Stats Section */}
