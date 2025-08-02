@@ -25,19 +25,19 @@ export default function Header() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.8 }}
-        className="text-2xl handwritten text-brown mb-4 transform rotate-1"
+        className="text-2xl handwritten text-brown mb-6 transform rotate-1 max-w-3xl mx-auto leading-relaxed"
       >
-        Find magical events for you and your bestie to create unforgettable memories together!
+        Discover amazing events perfectly matched for you and your friend's shared interests and location
       </motion.p>
       
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.9, duration: 0.6 }}
-        className="handwritten text-coral text-xl flex items-center justify-center gap-3"
+        className="handwritten text-coral text-lg flex items-center justify-center gap-3 bg-white/30 backdrop-blur-sm px-6 py-3 rounded-full border-2 border-coral/20 inline-flex"
       >
         <span style={{ animation: 'twinkle 1.5s ease-in-out infinite alternate' }}>✨</span>
-        <span>Scrapbook Magic</span>
+        <span>AI-Powered Event Matching</span>
         <span style={{ animation: 'twinkle 1.5s ease-in-out infinite alternate' }}>✨</span>
       </motion.div>
     </motion.header>

@@ -204,6 +204,63 @@
     cursor: not-allowed;
     transform: rotate(0deg);
   }
+
+  .form-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #E6E6FA;
+    border-radius: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    background: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15), 0 4px 12px rgba(0,0,0,0.1);
+    transform: scale(1.02);
+  }
+
+  .form-input::placeholder {
+    color: #A0A0A0;
+    font-style: italic;
+  }
+
+  /* Interests Section */
+  .interests-section {
+    margin-top: 25px;
+  }
+
+  .add-btn {
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #FFD700, #FFCBA4);
+    border: none;
+    border-radius: 16px;
+    font-family: 'Kalam', cursive;
+    font-weight: 600;
+    color: #8B4513;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    transform: rotate(-1deg);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+  }
+
+  .add-btn:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  }
+
+  .interests-container {
+    min-height: 50px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    border: 2px dashed #D3D3D3;
+    backdrop-filter: blur(10px);
+  }
 }
 
 @layer utilities {

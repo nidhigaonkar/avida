@@ -130,8 +130,8 @@ function App() {
           <h2 className="text-4xl handwritten text-brown mb-4 text-center transform -rotate-1">
             Create Your Profiles
           </h2>
-          <p className="text-lg text-brown text-center mb-8 max-w-2xl mx-auto leading-relaxed">
-            Fill out both profiles to discover events that match your combined interests and preferences
+          <p className="text-xl text-brown text-center mb-8 max-w-3xl mx-auto leading-relaxed">
+            Tell us about yourselves! We'll use AI to find events that perfectly match both of your interests, location, and preferences.
           </p>
           
           <div className="grid lg:grid-cols-2 gap-10">
