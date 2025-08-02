@@ -1,58 +1,76 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Sparkles } from 'lucide-react';
+import { Heart, Sparkles, Star } from 'lucide-react';
 
 export default function Header() {
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="bg-white shadow-sm border-b border-gray-100"
+      transition={{ duration: 0.8 }}
+      className="relative bg-gradient-to-r from-sunshine/20 to-peach/20 paper-texture"
     >
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="text-center">
-          <motion.div
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="flex items-center justify-center gap-3 mb-4"
-          >
-            <div className="relative">
-              <Heart className="w-8 h-8 text-red-500 fill-current" />
-              <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="absolute inset-0"
-              >
-                <Heart className="w-8 h-8 text-red-300 fill-current opacity-50" />
-              </motion.div>
-            </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+      <div className="max-w-6xl mx-auto px-6 py-12 text-center">
+        {/* Decorative elements */}
+        <div className="absolute top-4 left-8 text-coral text-2xl animate-bounce-slow">🌟</div>
+        <div className="absolute top-6 right-12 text-mint text-xl animate-pulse">💫</div>
+        <div className="absolute bottom-4 left-16 text-lavender text-lg">🎈</div>
+        <div className="absolute bottom-6 right-8 text-sky text-xl">🌈</div>
+        
+        <motion.div
+          initial={{ scale: 0.8, rotate: -5 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: 0.3, duration: 0.6, type: "spring" }}
+          className="relative inline-block"
+        >
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <motion.div
+              animate={{ 
+                scale: [1, 1.2, 1],
+                rotate: [0, 10, -10, 0]
+              }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="relative"
+            >
+              <Heart className="w-12 h-12 text-coral fill-current drop-shadow-lg" />
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-sunshine rounded-full animate-ping"></div>
+            </motion.div>
+            
+            <h1 className="text-6xl font-handwritten font-bold text-brown drop-shadow-sm">
               Avida
             </h1>
-            <Sparkles className="w-8 h-8 text-yellow-500" />
-          </motion.div>
+            
+            <motion.div
+              animate={{ rotate: [0, 15, -15, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <Sparkles className="w-10 h-10 text-sunshine drop-shadow-lg" />
+            </motion.div>
+          </div>
           
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-xl text-gray-600 max-w-2xl mx-auto"
-          >
-            Find perfect events for you and your friend to attend together
-          </motion.p>
-          
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-            className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-full text-sm font-medium"
-          >
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            AI-Powered Event Matching
-          </motion.div>
-        </div>
+          {/* Washi tape decoration */}
+          <div className="absolute -top-3 left-1/4 right-1/4 h-6 bg-gradient-to-r from-coral/60 to-peach/60 transform -rotate-1 rounded-sm opacity-80"></div>
+        </motion.div>
+        
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="text-2xl font-playful text-brown/80 max-w-3xl mx-auto leading-relaxed"
+        >
+          Find magical events for you and your bestie to create unforgettable memories together! ✨
+        </motion.p>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.6 }}
+          className="mt-8 inline-flex items-center gap-3 px-6 py-3 bg-mint/30 border-2 border-mint/50 rounded-full text-brown font-playful text-lg shadow-lg"
+        >
+          <div className="w-3 h-3 bg-mint rounded-full animate-pulse"></div>
+          <span>AI-Powered Magic ✨</span>
+          <Star className="w-5 h-5 text-sunshine animate-spin" style={{ animationDuration: '3s' }} />
+        </motion.div>
       </div>
     </motion.header>
   );
