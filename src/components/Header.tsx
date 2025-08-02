@@ -9,12 +9,6 @@ export default function Header() {
       transition={{ duration: 0.8 }}
       className="text-center mb-10 relative"
     >
-      {/* Decorative floating elements */}
-      <div className="absolute top-4 left-8 text-2xl animate-bounce" style={{ animationDuration: '2s' }}>🌟</div>
-      <div className="absolute top-6 right-12 text-xl" style={{ animation: 'twinkle 1.5s ease-in-out infinite alternate' }}>💫</div>
-      <div className="absolute bottom-4 left-16 text-lg">🎈</div>
-      <div className="absolute bottom-6 right-8 text-xl">🌈</div>
-      
       <motion.div
         initial={{ scale: 0.8, rotate: -5 }}
         animate={{ scale: 1, rotate: -2 }}
