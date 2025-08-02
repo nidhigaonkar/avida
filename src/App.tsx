@@ -287,7 +287,7 @@ function App() {
             transition={{ duration: 0.6, delay: 1.0 }}
             className="flex flex-wrap justify-center gap-4 mb-8"
           >
-            {['🤖 AI-Powered', '🎯 Perfect Matches', '🌟 Real Events'].map((badge, index) => (
+            {['AI-Powered', 'Perfect Matches', 'Real Events'].map((badge, index) => (
               <motion.span
                 key={badge}
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -299,34 +299,6 @@ function App() {
                 {badge}
               </motion.span>
             ))}
-          </motion.div>
-
-          {/* Scroll indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.5 }}
-            className="flex justify-center"
-          >
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center"
-            >
-              <motion.div
-                animate={{ y: [0, 12, 0] }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="w-1 h-3 bg-white/60 rounded-full mt-2"
-              />
-            </motion.div>
           </motion.div>
         </motion.div>
       </div>
