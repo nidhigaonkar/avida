@@ -19,14 +19,14 @@ export default {
         softgray: '#D3D3D3',
       },
       fontFamily: {
-        handwritten: ['Caveat', 'cursive'],
-        playful: ['Kalam', 'cursive'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        handwritten: ['Kalam', 'cursive'],
+        cursive: ['Caveat', 'cursive'],
+        sans: ['Poppins', 'system-ui', 'sans-serif'],
       },
       animation: {
         'bounce-slow': 'bounce 2s infinite',
         'wiggle': 'wiggle 0.5s ease-in-out',
-        'sparkle': 'sparkle 2s ease-in-out infinite',
+        'twinkle': 'twinkle 1.5s ease-in-out infinite alternate',
       },
     },
   },

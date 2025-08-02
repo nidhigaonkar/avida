@@ -11,53 +11,53 @@ interface EventCardProps {
 
 export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetails }) => {
   const getStatusColor = (status: string) => {
-    if (status.toLowerCase().includes('sold out')) return 'bg-red-50 text-red-700 border-red-200';
-    if (status.toLowerCase().includes('near capacity')) return 'bg-orange-50 text-orange-700 border-orange-200';
-    if (status.toLowerCase().includes('waitlist')) return 'bg-yellow-50 text-yellow-700 border-yellow-200';
-    if (status.includes('$')) return 'bg-green-50 text-green-700 border-green-200';
-    return 'bg-blue-50 text-blue-700 border-blue-200';
+    if (status.toLowerCase().includes('sold out')) return 'bg-coral text-white';
+    if (status.toLowerCase().includes('near capacity')) return 'bg-peach text-brown';
+    if (status.toLowerCase().includes('waitlist')) return 'bg-sunshine text-brown';
+    if (status.includes('$')) return 'bg-mint text-brown';
+    return 'bg-sky text-brown';
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20, rotate: 0 }}
+      animate={{ opacity: 1, y: 0, rotate: index % 2 === 0 ? 0.5 : -0.5 }}
       transition={{ delay: index * 0.1, duration: 0.5 }}
-      className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200 group"
+      className="event-card"
     >
       {/* Match Score */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Star className="w-5 h-5 text-yellow-500 fill-current" />
-          <span className="text-lg font-bold text-gray-900">
+          <Star className="w-6 h-6 text-sunshine fill-current" />
+          <span className="text-xl font-bold handwritten text-brown">
             {event.matchScore || 8}/10 Match
           </span>
         </div>
-        <div className="text-sm text-gray-500 font-medium">
+        <div className="handwritten text-brown text-lg font-semibold bg-sunshine/20 px-3 py-1 rounded-full">
           #{index + 1}
         </div>
       </div>
 
       {/* Event Title */}
-      <h3 className="text-xl font-bold text-gray-900 mb-4 leading-tight group-hover:text-blue-600 transition-colors">
+      <h3 className="text-xl font-bold text-brown mb-4 leading-tight hover:text-coral transition-colors">
         {event.title}
       </h3>
 
       {/* Event Details */}
       <div className="space-y-3 mb-6">
-        <div className="flex items-center gap-3 text-gray-600">
-          <Clock className="w-4 h-4 text-blue-500 flex-shrink-0" />
+        <div className="flex items-center gap-3 text-brown">
+          <Clock className="w-5 h-5 text-coral flex-shrink-0" />
           <span className="text-sm">{event.date}</span>
         </div>
         
-        <div className="flex items-center gap-3 text-gray-600">
-          <MapPin className="w-4 h-4 text-purple-500 flex-shrink-0" />
+        <div className="flex items-center gap-3 text-brown">
+          <MapPin className="w-5 h-5 text-sky flex-shrink-0" />
           <span className="text-sm">{event.location}</span>
         </div>
         
         {event.attendees && (
-          <div className="flex items-center gap-3 text-gray-600">
-            <Users className="w-4 h-4 text-green-500 flex-shrink-0" />
+          <div className="flex items-center gap-3 text-brown">
+            <Users className="w-5 h-5 text-mint flex-shrink-0" />
             <span className="text-sm">{event.attendees} attendees</span>
           </div>
         )}
@@ -65,14 +65,14 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetail
 
       {/* Status Badge */}
       {event.status && (
-        <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium border mb-4 ${getStatusColor(event.status)}`}>
+        <div className={`inline-block px-4 py-2 rounded-full text-sm font-semibold handwritten mb-4 ${getStatusColor(event.status)}`}>
           {event.status}
         </div>
       )}
 
       {/* Why it matches */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl mb-6">
-        <p className="text-sm text-gray-700 font-medium">
+      <div className="bg-gradient-to-r from-sunshine/20 to-peach/20 p-4 rounded-xl mb-6 border-2 border-dashed border-sunshine/30">
+        <p className="text-sm text-brown font-medium handwritten">
           🎯 {event.whyMatches || 'Great match based on your shared interests!'}
         </p>
       </div>
@@ -80,7 +80,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetail
       {/* Matching interests */}
       {(event.annaInterests?.length || event.jordanInterests?.length) && (
         <div className="mb-6">
-          <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Matching Interests</p>
+          <p className="text-xs font-semibold text-brown mb-3 handwritten">Matching Interests:</p>
           <div className="flex flex-wrap gap-2">
             {[...(event.annaInterests || []), ...(event.jordanInterests || [])]
               .filter((interest, index, arr) => arr.indexOf(interest) === index)
@@ -88,7 +88,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetail
               .map((interest, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium border border-green-200"
+                  className="px-3 py-1 bg-mint text-brown rounded-full text-xs font-medium handwritten border-2 border-mint/50"
                 >
                   {interest}
                 </span>
@@ -98,15 +98,17 @@ export const EventCard: React.FC<EventCardProps> = ({ event, index, onViewDetail
       )}
 
       {/* Action Button */}
-      <a
+      <motion.a
         href={event.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2 group"
+        whileHover={{ scale: 1.02, rotate: 0 }}
+        whileTap={{ scale: 0.98 }}
+        className="w-full bg-gradient-to-r from-coral to-peach text-white py-4 px-6 rounded-xl font-bold handwritten text-lg hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-3 border-2 border-coral/30 transform -rotate-1 hover:rotate-0"
       >
-        <ExternalLink className="w-5 h-5 group-hover:scale-110 transition-transform" />
+        <ExternalLink className="w-5 h-5" />
         View Event on Luma
-      </a>
+      </motion.a>
     </motion.div>
   );
 };

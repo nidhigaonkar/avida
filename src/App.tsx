@@ -114,66 +114,65 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <Toaster position="top-right" />
-      <Header />
       
-      <main className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-5 py-8">
+        <Header />
+        
         {/* Profile Forms Section */}
-        <motion.section
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="mb-16"
+          className="scrapbook-card mb-12"
         >
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Create Your Profiles
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Fill out both profiles to discover events that match your combined interests and preferences
-            </p>
-          </div>
+          <h2 className="text-4xl handwritten text-brown mb-4 text-center transform -rotate-1">
+            Create Your Profiles
+          </h2>
+          <p className="text-lg text-brown text-center mb-8 max-w-2xl mx-auto leading-relaxed">
+            Fill out both profiles to discover events that match your combined interests and preferences
+          </p>
           
-          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-10">
             <ProfileForm
               title="Person 1"
               onProfileChange={setProfile1}
-              gradient="from-pink-500 to-rose-500"
+              personNumber={1}
             />
             <ProfileForm
               title="Person 2"
               onProfileChange={setProfile2}
-              gradient="from-blue-500 to-indigo-500"
+              personNumber={2}
             />
           </div>
-        </motion.section>
+        </motion.div>
 
         {/* Find Events Button */}
-        <motion.section
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="mb-16"
         >
           <FindEventsButton
             onClick={findEvents}
             disabled={!canSearch}
             loading={loading}
           />
-        </motion.section>
+        </motion.div>
 
         {/* Events Section */}
         {(hasSearched || events.length > 0) && (
-          <motion.section
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
+            className="mt-12"
           >
             <EventList events={events} onEventSelect={handleEventSelect} />
-          </motion.section>
+          </motion.div>
         )}
-      </main>
+      </div>
 
       {/* Event Modal */}
       <EventModal

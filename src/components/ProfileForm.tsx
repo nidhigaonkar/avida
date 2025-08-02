@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, MapPin, Building, Plus, X } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 export interface ProfileData {
   name: string;
@@ -13,10 +13,10 @@ export interface ProfileData {
 interface ProfileFormProps {
   title: string;
   onProfileChange: (profile: ProfileData) => void;
-  gradient: string;
+  personNumber: number;
 }
 
-export const ProfileForm: React.FC<ProfileFormProps> = ({ title, onProfileChange, gradient }) => {
+export const ProfileForm: React.FC<ProfileFormProps> = ({ title, onProfileChange, personNumber }) => {
   const [profile, setProfile] = useState<ProfileData>({
     name: '',
     age: 18,
@@ -56,38 +56,37 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ title, onProfileChange
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100"
+      transition={{ duration: 0.6, delay: personNumber * 0.2 }}
+      className="profile-card"
     >
-      <div className="flex items-center gap-4 mb-8">
-        <div className={`w-14 h-14 bg-gradient-to-r ${gradient} rounded-2xl flex items-center justify-center shadow-lg`}>
-          <User className="w-7 h-7 text-white" />
-        </div>
-        <div>
-          <h3 className="text-2xl font-bold text-gray-900">{title}</h3>
-          <p className="text-gray-500">Fill out your profile details</p>
-        </div>
-      </div>
+      <h3 className="text-2xl handwritten text-brown mb-4 text-center">
+        {title}
+      </h3>
+      <p className="handwritten text-coral text-center mb-6 text-lg">
+        Fill out your profile details
+      </p>
 
-      <div className="space-y-6">
+      <div className="space-y-5">
         {/* Name */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">
+          <label className="block handwritten text-lg text-brown mb-2 relative">
             Full Name
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-sunshine to-transparent"></span>
           </label>
           <input
             type="text"
             value={profile.name}
             onChange={(e) => handleInputChange('name', e.target.value)}
             placeholder="Enter your full name"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 placeholder-gray-400"
+            className="w-full px-4 py-3 border-2 border-lavender rounded-xl focus:border-sunshine focus:ring-0 focus:scale-105 transition-all duration-300 bg-white"
           />
         </div>
 
         {/* Age */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">
+          <label className="block handwritten text-lg text-brown mb-2 relative">
             Age
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-sunshine to-transparent"></span>
           </label>
           <input
             type="number"
@@ -95,44 +94,45 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ title, onProfileChange
             max="100"
             value={profile.age}
             onChange={(e) => handleInputChange('age', parseInt(e.target.value) || 18)}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900"
+            className="w-full px-4 py-3 border-2 border-lavender rounded-xl focus:border-sunshine focus:ring-0 focus:scale-105 transition-all duration-300 bg-white"
           />
         </div>
 
         {/* Location */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">
-            <MapPin className="w-4 h-4 inline mr-2" />
-            Location
+          <label className="block handwritten text-lg text-brown mb-2 relative">
+            📍 Location
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-sunshine to-transparent"></span>
           </label>
           <input
             type="text"
             value={profile.location}
             onChange={(e) => handleInputChange('location', e.target.value)}
             placeholder="e.g., New York, NY"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 placeholder-gray-400"
+            className="w-full px-4 py-3 border-2 border-lavender rounded-xl focus:border-sunshine focus:ring-0 focus:scale-105 transition-all duration-300 bg-white"
           />
         </div>
 
         {/* Company */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">
-            <Building className="w-4 h-4 inline mr-2" />
-            Company/Organization
+          <label className="block handwritten text-lg text-brown mb-2 relative">
+            🏢 Company/Organization
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-sunshine to-transparent"></span>
           </label>
           <input
             type="text"
             value={profile.company}
             onChange={(e) => handleInputChange('company', e.target.value)}
             placeholder="e.g., Tech Corp"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 placeholder-gray-400"
+            className="w-full px-4 py-3 border-2 border-lavender rounded-xl focus:border-sunshine focus:ring-0 focus:scale-105 transition-all duration-300 bg-white"
           />
         </div>
 
         {/* Interests */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">
+          <label className="block handwritten text-lg text-brown mb-2 relative">
             Interests & Hobbies
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-sunshine to-transparent"></span>
           </label>
           <div className="flex gap-3 mb-4">
             <input
@@ -140,43 +140,48 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ title, onProfileChange
               value={newInterest}
               onChange={(e) => setNewInterest(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Add an interest (e.g., coffee, hiking, tech)"
-              className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 placeholder-gray-400"
+              placeholder="Add an interest (e.g., cooking, hiking)"
+              className="flex-1 px-4 py-3 border-2 border-lavender rounded-xl focus:border-sunshine focus:ring-0 focus:scale-105 transition-all duration-300 bg-white"
             />
             <button
               onClick={addInterest}
-              className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
+              className="px-5 py-3 bg-gradient-to-r from-sunshine to-peach border-0 rounded-xl handwritten font-semibold text-brown hover:scale-105 transition-all duration-300 transform -rotate-1 hover:rotate-0 shadow-lg"
             >
-              <Plus className="w-4 h-4" />
-              Add
+              + Add
             </button>
           </div>
           
           {/* Interest Tags */}
-          <div className="flex flex-wrap gap-2 min-h-[40px]">
+          <div className="flex flex-wrap gap-3 min-h-[60px] p-4 bg-white/50 rounded-xl border-2 border-dashed border-softgray">
             {profile.interests.map((interest, index) => (
               <motion.span
                 key={interest}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-200"
+                className="interest-tag"
+                style={{
+                  background: index % 3 === 0 
+                    ? 'linear-gradient(135deg, #FF7F7F, #FFCBA4)'
+                    : index % 3 === 1 
+                    ? 'linear-gradient(135deg, #87CEEB, #E6E6FA)'
+                    : 'linear-gradient(135deg, #98FB98, #87CEEB)'
+                }}
               >
                 {interest}
                 <button
                   onClick={() => removeInterest(interest)}
-                  className="hover:bg-blue-200 rounded-full p-1 transition-colors"
+                  className="bg-white/30 rounded-full w-5 h-5 flex items-center justify-center text-white font-bold hover:bg-white/50 transition-colors"
                 >
-                  <X className="w-3 h-3" />
+                  ×
                 </button>
               </motion.span>
             ))}
+            {profile.interests.length === 0 && (
+              <p className="handwritten text-brown text-center w-full opacity-60 py-2">
+                Add interests to help us find perfect events for you! ✨
+              </p>
+            )}
           </div>
-          
-          {profile.interests.length === 0 && (
-            <p className="text-gray-400 text-sm italic mt-2">
-              Add interests to help us find perfect events for you!
-            </p>
-          )}
         </div>
       </div>
     </motion.div>
