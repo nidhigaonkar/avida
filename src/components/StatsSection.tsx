@@ -68,5 +68,3 @@ export default function StatsSection({ totalEvents, matchedEvents, cities }: Sta
     </motion.div>
   );
 }
-
-export default StatsSection
