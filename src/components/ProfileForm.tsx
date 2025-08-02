@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus } from 'lucide-react';
 
 export interface ProfileData {
   name: string;
@@ -14,21 +13,19 @@ interface ProfileFormProps {
   title: string;
   onProfileChange: (profile: ProfileData) => void;
   personNumber: number;
+  profile: ProfileData;
 }
 
-export const ProfileForm: React.FC<ProfileFormProps> = ({ title, onProfileChange, personNumber }) => {
-  const [profile, setProfile] = useState<ProfileData>({
-    name: '',
-    age: 18,
-    location: '',
-    company: '',
-    interests: []
-  });
+export const ProfileForm: React.FC<ProfileFormProps> = ({ 
+  title, 
+  onProfileChange, 
+  personNumber,
+  profile 
+}) => {
   const [newInterest, setNewInterest] = useState('');
 
   const handleInputChange = (field: keyof ProfileData, value: any) => {
     const updatedProfile = { ...profile, [field]: value };
-    setProfile(updatedProfile);
     onProfileChange(updatedProfile);
   };
 
@@ -59,102 +56,83 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ title, onProfileChange
       transition={{ duration: 0.6, delay: personNumber * 0.2 }}
       className="profile-card"
     >
-      <h3 className="text-2xl handwritten text-brown mb-4 text-center">
-        {title}
-      </h3>
-      <p className="handwritten text-coral text-center mb-6 text-lg">
-        Fill out your profile details
-      </p>
+      <h3 className="profile-title">{title}</h3>
+      <p className="profile-subtitle">Fill out your profile details</p>
 
       <div className="space-y-5">
         {/* Name */}
-        <div>
-          <label className="block handwritten text-lg text-brown mb-2 relative">
-            Full Name
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-sunshine to-transparent"></span>
-          </label>
+        <div className="form-group">
+          <label className="form-label">Full Name</label>
           <input
             type="text"
             value={profile.name}
             onChange={(e) => handleInputChange('name', e.target.value)}
             placeholder="Enter your full name"
-            className="w-full px-4 py-3 border-2 border-lavender rounded-xl focus:border-sunshine focus:ring-0 focus:scale-105 transition-all duration-300 bg-white"
+            className="form-input"
           />
         </div>
 
         {/* Age */}
-        <div>
-          <label className="block handwritten text-lg text-brown mb-2 relative">
-            Age
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-sunshine to-transparent"></span>
-          </label>
+        <div className="form-group">
+          <label className="form-label">Age</label>
           <input
             type="number"
             min="16"
             max="100"
             value={profile.age}
             onChange={(e) => handleInputChange('age', parseInt(e.target.value) || 18)}
-            className="w-full px-4 py-3 border-2 border-lavender rounded-xl focus:border-sunshine focus:ring-0 focus:scale-105 transition-all duration-300 bg-white"
+            className="form-input"
           />
         </div>
 
         {/* Location */}
-        <div>
-          <label className="block handwritten text-lg text-brown mb-2 relative">
-            📍 Location
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-sunshine to-transparent"></span>
-          </label>
+        <div className="form-group">
+          <label className="form-label">📍 Location</label>
           <input
             type="text"
             value={profile.location}
             onChange={(e) => handleInputChange('location', e.target.value)}
             placeholder="e.g., New York, NY"
-            className="w-full px-4 py-3 border-2 border-lavender rounded-xl focus:border-sunshine focus:ring-0 focus:scale-105 transition-all duration-300 bg-white"
+            className="form-input"
           />
         </div>
 
         {/* Company */}
-        <div>
-          <label className="block handwritten text-lg text-brown mb-2 relative">
-            🏢 Company/Organization
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-sunshine to-transparent"></span>
-          </label>
+        <div className="form-group">
+          <label className="form-label">🏢 Company/Organization</label>
           <input
             type="text"
             value={profile.company}
             onChange={(e) => handleInputChange('company', e.target.value)}
             placeholder="e.g., Tech Corp"
-            className="w-full px-4 py-3 border-2 border-lavender rounded-xl focus:border-sunshine focus:ring-0 focus:scale-105 transition-all duration-300 bg-white"
+            className="form-input"
           />
         </div>
 
         {/* Interests */}
-        <div>
-          <label className="block handwritten text-lg text-brown mb-2 relative">
-            Interests & Hobbies
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-sunshine to-transparent"></span>
-          </label>
-          <div className="flex gap-3 mb-4">
+        <div className="interests-section">
+          <label className="form-label">Interests & Hobbies</label>
+          <div className="interests-input-container">
             <input
               type="text"
               value={newInterest}
               onChange={(e) => setNewInterest(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Add an interest (e.g., cooking, hiking)"
-              className="flex-1 px-4 py-3 border-2 border-lavender rounded-xl focus:border-sunshine focus:ring-0 focus:scale-105 transition-all duration-300 bg-white"
+              className="form-input add-interest-input"
             />
             <button
               onClick={addInterest}
-              className="px-5 py-3 bg-gradient-to-r from-sunshine to-peach border-0 rounded-xl handwritten font-semibold text-brown hover:scale-105 transition-all duration-300 transform -rotate-1 hover:rotate-0 shadow-lg"
+              className="add-btn"
             >
               + Add
             </button>
           </div>
           
           {/* Interest Tags */}
-          <div className="flex flex-wrap gap-3 min-h-[60px] p-4 bg-white/50 rounded-xl border-2 border-dashed border-softgray">
+          <div className="interests-container">
             {profile.interests.map((interest, index) => (
-              <motion.span
+              <motion.div
                 key={interest}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -170,14 +148,14 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ title, onProfileChange
                 {interest}
                 <button
                   onClick={() => removeInterest(interest)}
-                  className="bg-white/30 rounded-full w-5 h-5 flex items-center justify-center text-white font-bold hover:bg-white/50 transition-colors"
+                  className="remove-interest"
                 >
                   ×
                 </button>
-              </motion.span>
+              </motion.div>
             ))}
             {profile.interests.length === 0 && (
-              <p className="handwritten text-brown text-center w-full opacity-60 py-2">
+              <p className="helper-text">
                 Add interests to help us find perfect events for you! ✨
               </p>
             )}

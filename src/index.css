@@ -20,20 +20,21 @@
 }
 
 @layer components {
-  .scrapbook-card {
+  /* Profile Section */
+  .profile-section {
     background: #FFFFFF;
     border-radius: 20px;
     padding: 40px;
+    margin: 30px 0;
     box-shadow: 
       0 10px 30px rgba(0,0,0,0.1),
       inset 0 1px 0 rgba(255,255,255,0.8);
     border: 3px solid #FFD700;
     position: relative;
     transform: rotate(-0.5deg);
-    transition: all 0.3s ease;
   }
 
-  .scrapbook-card::before {
+  .profile-section::before {
     content: "";
     position: absolute;
     top: -10px;
@@ -46,14 +47,29 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
 
+  .profiles-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 30px;
+  }
+
+  @media (max-width: 768px) {
+    .profiles-container {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
   .profile-card {
     background: #FAF0E6;
-    border-radius: 15px;
+    border-radius: 20px;
     padding: 30px;
-    border: 2px dashed #FFD700;
+    border: 3px dashed #FFD700;
     position: relative;
     transform: rotate(1deg);
     transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
   }
 
   .profile-card:nth-child(2) {
@@ -69,13 +85,14 @@
   .profile-card::before {
     content: "";
     position: absolute;
-    top: -8px;
+    top: -12px;
     right: 15px;
-    width: 30px;
-    height: 15px;
+    width: 40px;
+    height: 20px;
     background: #87CEEB;
-    border-radius: 5px;
+    border-radius: 8px;
     transform: rotate(-10deg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
 
   .profile-card:nth-child(2)::before {
@@ -85,21 +102,135 @@
     transform: rotate(10deg);
   }
 
+  .profile-title {
+    font-family: 'Kalam', cursive;
+    font-size: 2rem;
+    color: #8B4513;
+    margin-bottom: 10px;
+    text-align: center;
+    transform: rotate(-1deg);
+  }
+
+  .profile-subtitle {
+    font-family: 'Kalam', cursive;
+    color: #FF7F7F;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+  }
+
+  /* Form Styling */
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    font-family: 'Kalam', cursive;
+    font-size: 1.2rem;
+    color: #8B4513;
+    margin-bottom: 8px;
+    position: relative;
+    font-weight: 600;
+  }
+
+  .form-label::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #FFD700, transparent);
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 3px solid #E6E6FA;
+    border-radius: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    background: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15), 0 6px 20px rgba(0,0,0,0.12);
+    transform: scale(1.02);
+  }
+
+  .form-input::placeholder {
+    color: #A0A0A0;
+    font-style: italic;
+  }
+
+  /* Interests Section */
+  .interests-section {
+    margin-top: 25px;
+  }
+
+  .interests-input-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+
+  .add-interest-input {
+    flex: 1;
+  }
+
+  .add-btn {
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #FFD700, #FFCBA4);
+    border: none;
+    border-radius: 16px;
+    font-family: 'Kalam', cursive;
+    font-weight: 600;
+    color: #8B4513;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    transform: rotate(-1deg);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+    font-size: 1rem;
+  }
+
+  .add-btn:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  }
+
+  .interests-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 15px;
+    min-height: 60px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+    border: 3px dashed #D3D3D3;
+    backdrop-filter: blur(10px);
+  }
+
   .interest-tag {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 15px;
+    padding: 10px 16px;
     background: linear-gradient(135deg, #FF7F7F, #FFCBA4);
     color: white;
-    border-radius: 20px;
+    border-radius: 25px;
     font-family: 'Kalam', cursive;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.3s ease;
     transform: rotate(-2deg);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
 
   .interest-tag:nth-child(even) {
@@ -114,13 +245,45 @@
 
   .interest-tag:hover {
     transform: rotate(0deg) scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
   }
 
+  .remove-interest {
+    background: rgba(255,255,255,0.3);
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
+
+  .remove-interest:hover {
+    background: rgba(255,255,255,0.5);
+    transform: scale(1.1);
+  }
+
+  .helper-text {
+    font-family: 'Kalam', cursive;
+    color: #8B4513;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 10px;
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  /* Event Cards */
   .event-card {
     background: #FFFFFF;
-    border-radius: 15px;
+    border-radius: 20px;
     padding: 25px;
-    border: 2px solid #FFD700;
+    border: 3px solid #FFD700;
     position: relative;
     transform: rotate(0.5deg);
     transition: all 0.3s ease;
@@ -140,13 +303,14 @@
   .event-card::before {
     content: "";
     position: absolute;
-    top: -6px;
+    top: -8px;
     right: 20px;
-    width: 25px;
-    height: 12px;
+    width: 30px;
+    height: 15px;
     background: #98FB98;
-    border-radius: 3px;
+    border-radius: 5px;
     transform: rotate(-15deg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
 
   .event-card:nth-child(even)::before {
@@ -204,63 +368,6 @@
     cursor: not-allowed;
     transform: rotate(0deg);
   }
-
-  .form-input {
-    width: 100%;
-    padding: 16px 20px;
-    border: 2px solid #E6E6FA;
-    border-radius: 16px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    background: #FFFFFF;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-  }
-
-  .form-input:focus {
-    outline: none;
-    border-color: #FFD700;
-    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15), 0 4px 12px rgba(0,0,0,0.1);
-    transform: scale(1.02);
-  }
-
-  .form-input::placeholder {
-    color: #A0A0A0;
-    font-style: italic;
-  }
-
-  /* Interests Section */
-  .interests-section {
-    margin-top: 25px;
-  }
-
-  .add-btn {
-    padding: 16px 24px;
-    background: linear-gradient(135deg, #FFD700, #FFCBA4);
-    border: none;
-    border-radius: 16px;
-    font-family: 'Kalam', cursive;
-    font-weight: 600;
-    color: #8B4513;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    transform: rotate(-1deg);
-    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
-  }
-
-  .add-btn:hover {
-    transform: rotate(0deg) scale(1.05);
-    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
-  }
-
-  .interests-container {
-    min-height: 50px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 16px;
-    border: 2px dashed #D3D3D3;
-    backdrop-filter: blur(10px);
-  }
 }
 
 @layer utilities {
@@ -288,4 +395,12 @@
 @keyframes wiggle {
   0%, 100% { transform: rotate(-2deg); }
   50% { transform: rotate(2deg); }
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
 }

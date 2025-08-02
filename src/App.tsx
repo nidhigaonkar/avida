@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import Header from './components/Header';
-import { ProfileForm, ProfileData } from './components/ProfileForm';
+import { ProfileSection } from './components/ProfileSection';
+import { HowItWorks } from './components/HowItWorks';
+import { Footer } from './components/Footer';
+import { ProfileData } from './components/ProfileForm';
 import { FindEventsButton } from './components/FindEventsButton';
 import { EventList } from './components/EventList';
 import { EventModal } from './components/EventModal';
 import { MatchedEvent, Event } from './types';
 
 function App() {
+  const [currentView, setCurrentView] = useState<'landing' | 'app'>('landing');
   const [profile1, setProfile1] = useState<ProfileData>({
     name: '',
     age: 18,
@@ -39,6 +43,10 @@ function App() {
   };
 
   const canSearch = isFormValid(profile1) && isFormValid(profile2);
+
+  const handleGetStarted = () => {
+    setCurrentView('app');
+  };
 
   const findEvents = async () => {
     if (!canSearch) return;
@@ -113,40 +121,42 @@ function App() {
     setIsModalOpen(true);
   };
 
+  if (currentView === 'landing') {
+    return (
+      <div className="min-h-screen">
+        <Toaster position="top-right" />
+        
+        {/* Landing Page */}
+        <Header onGetStarted={handleGetStarted} />
+        <HowItWorks />
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       <Toaster position="top-right" />
       
+      {/* App View */}
       <div className="max-w-6xl mx-auto px-5 py-8">
-        <Header />
-        
-        {/* Profile Forms Section */}
-        <motion.div
+        {/* Back to Landing */}
+        <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="scrapbook-card mb-12"
+          onClick={() => setCurrentView('landing')}
+          className="mb-8 px-4 py-2 text-brown hover:text-coral transition-colors flex items-center gap-2"
         >
-          <h2 className="text-4xl handwritten text-brown mb-4 text-center transform -rotate-1">
-            Create Your Profiles
-          </h2>
-          <p className="text-xl text-brown text-center mb-8 max-w-3xl mx-auto leading-relaxed">
-            Tell us about yourselves! We'll use AI to find events that perfectly match both of your interests, location, and preferences.
-          </p>
-          
-          <div className="grid lg:grid-cols-2 gap-10">
-            <ProfileForm
-              title="Person 1"
-              onProfileChange={setProfile1}
-              personNumber={1}
-            />
-            <ProfileForm
-              title="Person 2"
-              onProfileChange={setProfile2}
-              personNumber={2}
-            />
-          </div>
-        </motion.div>
+          ← Back to Home
+        </motion.button>
+
+        {/* Profile Section */}
+        <ProfileSection
+          profile1={profile1}
+          profile2={profile2}
+          setProfile1={setProfile1}
+          setProfile2={setProfile2}
+        />
 
         {/* Find Events Button */}
         <motion.div
